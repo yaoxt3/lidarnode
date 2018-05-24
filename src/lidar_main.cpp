@@ -37,10 +37,14 @@
 using namespace std;
 using namespace cv;
 
+
 struct frame_info{
 	int point_cluster_num; // point cluster number
 	int *index; // record the vector index of different point clusters
-	pcl::PointCloud<pcl::PointXYZI>::Ptr cluster(pcl::PointCloud<pcl::PointXYZI>); // use different intensities to differentiate point clusters
+	pcl::PointCloud<pcl::PointXYZI>::Ptr cluster; // use different intensities to differentiate point clusters
+	frame_info(){
+		point_cluster_num = 0;
+	}
 };
 
 // set threshold to extract river surface
@@ -139,12 +143,16 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
     pcl::PCDWriter writer;
     pcl::PointCloud<pcl::PointXYZI> mycloud;
 
-    frame_points[frame_id].point_cluster_num = cluster_indices.size();
+    frame_info pinfo;
+    pinfo.point_cluster_num = cluster_indices.size();
+    pinfo.index = new int[cluster_indices.size()+1];
 
+	cout << "@@@" << endl;
     int j = 1;
     float intensity = 255.0f / cluster_indices.size();
     int point_nums = 0;
-    pcl::PointCloud<pcl::PointXYZI>::Ptr cloud_cluster(new pcl::PointCloud<pcl::PointXYZI>);
+
+	pcl::PointCloud<pcl::PointXYZI>::Ptr mcluster(new pcl::PointCloud<pcl::PointXYZI>); // use different intensities to differentiate point clusters
 	for (vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin(); it != cluster_indices.end(); it++) {
         //cout << "in function " << endl;
         int cnt = 0;
@@ -154,13 +162,15 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
             point.y = pointer->points[*pit].y;
             point.z = pointer->points[*pit].z;
             point.intensity = intensity * j;
-		    cloud_cluster->points.push_back(point);
+            //pinfo.cluster->points.push_back(point);
+            mcluster->points.push_back(point);
 		    cnt ++;
 		}
-        cloud_cluster->width = cloud_cluster->points.size();
-        cloud_cluster->height = 1;
-        cloud_cluster->is_dense = true;
-        point_nums += cloud_cluster->points.size();
+		cout << "###" << endl;
+        mcluster->width = mcluster->points.size();
+        mcluster->height = 1;
+        mcluster->is_dense = true;
+        point_nums += mcluster->points.size();
 
         cout << "No." << j << ":" << cnt <<" points"  << endl;
         j++;
@@ -177,14 +187,14 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
         */
         //while(1);
 	}
-    mycloud = *cloud_cluster;
+	mycloud = *mcluster;
 	cout << "end." << endl;
     sensor_msgs::PointCloud2 pub_msgs;
     pcl::toROSMsg(mycloud,pub_msgs);
     pub_msgs.header.frame_id = "/velodyne";
     test_points_pub_.publish(pub_msgs);
 	frame_id++;
-
+	frame_points.push_back(pinfo);
     while(1){
         int key;
         cin >> key;
