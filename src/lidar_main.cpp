@@ -100,14 +100,14 @@ float Lidar_node::calculate_distance2(pcl::PointXYZI a, pcl::PointXYZI b){
 // Tracking Model for point cloud
 void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 {
-	//
+
 	if(frame_id >= 3){
 		vector<frame_info >::iterator it = frame_points.begin();
 		frame_points.erase(it);
 		frame_points[0] = frame_points[1];
 		frame_points[1] = frame_points[2];
 	}
-	frame_id++;
+
     pcl::PointCloud<pcl::PointXYZI>::Ptr pointer(new pcl::PointCloud<pcl::PointXYZI>);
     pointer = pointset->makeShared(); // transform to pointer form
 
@@ -138,6 +138,8 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
     cout << cluster_indices.size() << " clusters" << endl;
     pcl::PCDWriter writer;
     pcl::PointCloud<pcl::PointXYZI> mycloud;
+
+    frame_points[frame_id].point_cluster_num = cluster_indices.size();
 
     int j = 1;
     float intensity = 255.0f / cluster_indices.size();
@@ -181,6 +183,7 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
     pcl::toROSMsg(mycloud,pub_msgs);
     pub_msgs.header.frame_id = "/velodyne";
     test_points_pub_.publish(pub_msgs);
+	frame_id++;
 
     while(1){
         int key;
