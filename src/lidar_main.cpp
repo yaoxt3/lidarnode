@@ -37,21 +37,58 @@
 using namespace std;
 using namespace cv;
 
+
 struct particle_state{
 	double x;
 	double y;
 	double z;
+	particle_state(){
+		x = 0.0;
+		y = 0.0;
+		z = 0.0;
+	}
 };
+
 
 /*
  * @state: particle's position (x,y,z)
- * @observed_value:
- * @likelihood
+ * @observed_value: particle's observed value in (x,y,z)
+ * @likelihood: the likelihood between the current particle and the initial object
  */
 struct particle_filter{
 	particle_state state;
 	pcl::PointCloud<pcl::PointXYZI> observed_value;
 	double likelihood;
+	particle_filter(){
+		observed_value.clear();
+		likelihood = 0.0;
+	}
+};
+
+/*
+ * @cluster_xyz: the center position of the pointcloud cluster
+ * @height: max(z) - min(z)
+ * @width:  max(x) - min(x)
+ * @longth: max(y) - min(y)
+ * calculate the moment invariant of the cluster by (height,width,longth)
+ */
+struct cluster_info{
+	double center_x;
+	double center_y;
+	double center_z;
+	double height;
+	double width;
+	double longth;
+	pcl::PointCloud<pcl::PointXYZI> points;
+	cluster_info(){
+		center_x = 0.0;
+		center_y = 0.0;
+		center_z = 0.0;
+		height = 0.0;
+		width = 0.0;
+		longth = 0.0;
+		points.clear();
+	}
 };
 
 /*
