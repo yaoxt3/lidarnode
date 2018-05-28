@@ -37,11 +37,32 @@
 using namespace std;
 using namespace cv;
 
+struct particle_state{
+	double x;
+	double y;
+	double z;
+};
 
+/*
+ * @state: particle's position (x,y,z)
+ * @observed_value:
+ * @likelihood
+ */
+struct particle_filter{
+	particle_state state;
+	pcl::PointCloud<pcl::PointXYZI> observed_value;
+	double likelihood;
+};
+
+/*
+ * @point_cluster_num: the point cluster number
+ * @index: the vector index of different point clusters
+ * @cluster: store all points in the current frame, and differentiate point clusters by different intensities
+ */
 struct frame_info{
-	int point_cluster_num; // point cluster number
-	int *index; // record the vector index of different point clusters
-	pcl::PointCloud<pcl::PointXYZI>::Ptr cluster; // use different intensities to differentiate point clusters
+	int point_cluster_num;
+	int *index;
+	pcl::PointCloud<pcl::PointXYZI> cluster;
 	frame_info(){
 		point_cluster_num = 0;
 	}
@@ -187,6 +208,7 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
         */
         //while(1);
 	}
+	pinfo.cluster = *mcluster;
 	mycloud = *mcluster;
 	cout << "end." << endl;
     sensor_msgs::PointCloud2 pub_msgs;
