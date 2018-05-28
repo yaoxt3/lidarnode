@@ -94,12 +94,13 @@ struct cluster_info{
 /*
  * @point_cluster_num: the point cluster number
  * @index: the vector index of different point clusters
- * @cluster: store all points in the current frame, and differentiate point clusters by different intensities
+ * @cluster: store all pointcloud clusters in the current frame, and differentiate pointcloud clusters by different intensities
  */
 struct frame_info{
 	int point_cluster_num;
 	int *index;
-	pcl::PointCloud<pcl::PointXYZI> cluster;
+//	pcl::PointCloud<pcl::PointXYZI> cluster;
+	cluster_info *cluster;
 	frame_info(){
 		point_cluster_num = 0;
 	}
