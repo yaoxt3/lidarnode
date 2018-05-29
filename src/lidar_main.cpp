@@ -38,6 +38,10 @@ using namespace std;
 using namespace cv;
 
 
+class ParticleFilter{
+	
+};
+
 struct particle_state{
 	double x;
 	double y;
@@ -110,7 +114,6 @@ struct frame_info{
 	}
 };
 
-// set threshold to extract river surface
 class Lidar_node{
 public:
     Lidar_node();
@@ -168,6 +171,7 @@ float Lidar_node::calculate_distance2(pcl::PointXYZI a, pcl::PointXYZI b){
 void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 {
 
+	cout << "frame_id:" << frame_id << endl;
 	if(frame_id >= 3){
 		vector<frame_info >::iterator it = frame_points.begin();
 		frame_points.erase(it);
@@ -203,13 +207,11 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
     extractor.extract(cluster_indices);
 
     cout << cluster_indices.size() << " clusters" << endl;
-    //pcl::PCDWriter writer;
     pcl::PointCloud<pcl::PointXYZI> mycloud;
 
     frame_info pinfo;
     pinfo.point_cluster_num = cluster_indices.size();
     pinfo.cluster = new cluster_info[cluster_indices.size()];
-    //pinfo.index = new int[cluster_indices.size()+1];
 
 	cout << "@@@" << endl;
     int j = 1;
@@ -242,17 +244,6 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
         cout << "No." << j << ":" << cnt <<" points"  << endl;
         j++;
 
-        /*
-        cout << "PointCloud representing the cluster: " << cloud_cluster->points.size() << " data points." << endl;
-        string filename = "/home/yxt/document/lidar/pcd/1_23paddle_leaf/cloud_cluster_";
-        stringstream ss;
-        ss << j;
-        filename += ss.str();
-        filename += ".pcd";
-        cout << filename << endl;
-        writer.write<pcl::PointXYZI> (filename, *cloud_cluster, false);
-        */
-        //while(1);
 	}
 	//pinfo.cluster = *mcluster;
 	//pinfo.cluster[j-1].points = *mcluster;
