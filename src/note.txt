@@ -1,0 +1,10 @@
+##section 1: store each pointcloud cluster data in pcd format
+##code:
+pcl::PCDWriter writer;
+string filename = "/home/yxt/document/lidar/pcd/1_23paddle_leaf/cloud_cluster_";
+stringstream ss;
+ss << j;
+filename += ss.str();
+filename += ".pcd";
+cout << filename << endl;
+writer.write<pcl::PointXYZI> (filename, *cloud_cluster, false);

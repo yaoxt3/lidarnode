@@ -70,23 +70,27 @@ struct particle_filter{
  * @height: max(z) - min(z)
  * @width:  max(x) - min(x)
  * @longth: max(y) - min(y)
+ * @pf:create 30 particle objects for cluster
  * calculate the moment invariant of the cluster by (height,width,longth)
  */
 struct cluster_info{
+	const int particle_num;
 	double center_x;
 	double center_y;
 	double center_z;
 	double height;
 	double width;
 	double longth;
+	particle_filter *pf;
 	pcl::PointCloud<pcl::PointXYZI> points;
-	cluster_info(){
+	cluster_info():particle_num(30){
 		center_x = 0.0;
 		center_y = 0.0;
 		center_z = 0.0;
 		height = 0.0;
 		width = 0.0;
 		longth = 0.0;
+		pf = new particle_filter[particle_num];
 		points.clear();
 	}
 };
@@ -98,7 +102,7 @@ struct cluster_info{
  */
 struct frame_info{
 	int point_cluster_num;
-	int *index;
+//	int *index;
 //	pcl::PointCloud<pcl::PointXYZI> cluster;
 	cluster_info *cluster;
 	frame_info(){
@@ -199,12 +203,13 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
     extractor.extract(cluster_indices);
 
     cout << cluster_indices.size() << " clusters" << endl;
-    pcl::PCDWriter writer;
+    //pcl::PCDWriter writer;
     pcl::PointCloud<pcl::PointXYZI> mycloud;
 
     frame_info pinfo;
     pinfo.point_cluster_num = cluster_indices.size();
-    pinfo.index = new int[cluster_indices.size()+1];
+    pinfo.cluster = new cluster_info[cluster_indices.size()];
+    //pinfo.index = new int[cluster_indices.size()+1];
 
 	cout << "@@@" << endl;
     int j = 1;
@@ -221,11 +226,14 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
             point.y = pointer->points[*pit].y;
             point.z = pointer->points[*pit].z;
             point.intensity = intensity * j;
-            //pinfo.cluster->points.push_back(point);
+            pinfo.cluster[j-1].points.push_back(point);
             mcluster->points.push_back(point);
 		    cnt ++;
 		}
 		cout << "###" << endl;
+		pinfo.cluster[j-1].points.width = pinfo.cluster[j-1].points.size();
+		pinfo.cluster[j-1].points.height = 1;
+		pinfo.cluster[j-1].points.is_dense = true;
         mcluster->width = mcluster->points.size();
         mcluster->height = 1;
         mcluster->is_dense = true;
@@ -246,7 +254,8 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
         */
         //while(1);
 	}
-	pinfo.cluster = *mcluster;
+	//pinfo.cluster = *mcluster;
+	//pinfo.cluster[j-1].points = *mcluster;
 	mycloud = *mcluster;
 	cout << "end." << endl;
     sensor_msgs::PointCloud2 pub_msgs;
