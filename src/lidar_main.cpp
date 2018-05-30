@@ -113,7 +113,6 @@ struct cluster_info{
 	double height;
 	double width;
 	double longth;
-	//particle_filter *pf;
 	ParticleFilter *pf;
 	pcl::PointCloud<pcl::PointXYZI> points;
 	cluster_info():particle_num(30){
@@ -272,10 +271,13 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 
         cout << "No." << j << ":" << cnt <<" points"  << endl;
         j++;
-
 	}
-	//pinfo.cluster = *mcluster;
-	//pinfo.cluster[j-1].points = *mcluster;
+
+	//particle filter section
+	for (int i = 0; i < pinfo.point_cluster_num; ++i) {
+		pinfo.cluster[i].pf->initialParticle();
+	}
+
 	mycloud = *mcluster;
 	cout << "end." << endl;
     sensor_msgs::PointCloud2 pub_msgs;
@@ -292,7 +294,6 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
             break;
         }
     }
-
 }
 
 /*
