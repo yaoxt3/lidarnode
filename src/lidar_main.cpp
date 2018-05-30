@@ -33,41 +33,69 @@
 #include <pcl/segmentation/extract_clusters.h>
 #include <pcl/filters/extract_indices.h>
 #include <pcl/visualization/cloud_viewer.h>
-
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_randist.h>
 using namespace std;
 using namespace cv;
 
-
-class ParticleFilter{
-	
-};
-
-struct particle_state{
+/*
+ * @x,y,z: the current (x,y,z) coordinate
+ * @px,py,pz: the previous (x,y,z) coordinate
+ * @x0,y0,z0: the original (x,y,z) coordinate
+ * @height,width,longth: the original (height,width,longth) of object tracked by particle
+ * @likelihood:the similarity between the current object described by particle and the original object
+ */
+struct particle{
 	double x;
 	double y;
 	double z;
-	particle_state(){
-		x = 0.0;
-		y = 0.0;
-		z = 0.0;
+	double px;
+	double py;
+	double pz;
+	double x0;
+	double y0;
+	double z0;
+	double height;
+	double width;
+	double longth;
+	double likelihood;
+	pcl::PointCloud<pcl::PointXYZI> observed_value;
+	particle(){
+		x = y = z = 0.0;
+		px = py = pz = 0.0;
+		x0 = y0 = z0 = 0.0;
+		height = width = longth = 0.0;
+		likelihood = 0.0;
+		observed_value.clear();
 	}
 };
-
 
 /*
- * @state: particle's position (x,y,z)
- * @observed_value: particle's observed value in (x,y,z)
- * @likelihood: the likelihood between the current particle and the initial object
+ * @initialParticle: initialize particle's state
+ * @transition: update the current particle's state by previous state
+ * @normalizeWeights: normalize particle's weights
+ * @resample: resampling the particles to keep the diversity of particles
+ * @getLikelihood: calculate the similarity between the particle's observed value and the tracked object
+ * @objectid: the tracked object id
+ * @MAX_PARTICLE_NUM: maximum partilce number
+ * @particles: particle set
+ * @rng: gsl library variable to generate guassian-distribution number
  */
-struct particle_filter{
-	particle_state state;
-	pcl::PointCloud<pcl::PointXYZI> observed_value;
-	double likelihood;
-	particle_filter(){
-		observed_value.clear();
-		likelihood = 0.0;
-	}
+class ParticleFilter{
+public:
+	ParticleFilter();
+	void initialParticle();
+	void transition();
+	void normalizeWeights();
+	void resample();
+	double getLikelihood();
+
+	int objectid;
+	const int MAX_PARTICLE_NUM;
+	particle *particles;
+	gsl_rng *rng;
 };
+
 
 /*
  * @cluster_xyz: the center position of the pointcloud cluster
@@ -85,7 +113,8 @@ struct cluster_info{
 	double height;
 	double width;
 	double longth;
-	particle_filter *pf;
+	//particle_filter *pf;
+	ParticleFilter *pf;
 	pcl::PointCloud<pcl::PointXYZI> points;
 	cluster_info():particle_num(30){
 		center_x = 0.0;
@@ -94,7 +123,7 @@ struct cluster_info{
 		height = 0.0;
 		width = 0.0;
 		longth = 0.0;
-		pf = new particle_filter[particle_num];
+		//pf = new ParticleFilter;
 		points.clear();
 	}
 };
@@ -117,6 +146,12 @@ struct frame_info{
 class Lidar_node{
 public:
     Lidar_node();
+	// function
+	void cluster_function(const pcl::PointCloud<pcl::PointXYZI> *pointset);
+	void processPointCloud(const sensor_msgs::PointCloud2 &scan);
+	void TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset);
+	float calculate_distance2(const pcl::PointXYZI a, const pcl::PointXYZI b);
+	void find_center(const pcl::PointCloud<pcl::PointXYZI> *pointset, pcl::PointCloud<pcl::PointXYZI> *cluster_center);
 private:
     ros::NodeHandle node_handle_;
     ros::Subscriber points_node_sub_;
@@ -134,12 +169,6 @@ private:
     float forward_max_threshold;
     vector<float > vmin_dist;
     vector<frame_info > frame_points; // record three frames information
-    // function
-    void cluster_function(const pcl::PointCloud<pcl::PointXYZI> *pointset);
-    void processPointCloud(const sensor_msgs::PointCloud2 &scan);
-    void TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset);
-    float calculate_distance2(const pcl::PointXYZI a, const pcl::PointXYZI b);
-    void find_center(const pcl::PointCloud<pcl::PointXYZI> *pointset, pcl::PointCloud<pcl::PointXYZI> *cluster_center);
 };
 
 
