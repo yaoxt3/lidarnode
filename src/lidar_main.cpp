@@ -276,6 +276,8 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 	//particle filter section
 	for (int i = 0; i < pinfo.point_cluster_num; ++i) {
 		pinfo.cluster[i].pf->initialParticle();
+
+		pinfo.cluster[i].pf->getLikelihood();
 	}
 
 	mycloud = *mcluster;
