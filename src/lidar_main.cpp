@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
+#include <math.h>
 #include <cmath>
 #include <vector>
 #include <ctime>
@@ -77,6 +78,7 @@ struct particle{
  * @normalizeWeights: normalize particle's weights
  * @resample: resampling the particles to keep the diversity of particles
  * @getLikelihood: calculate the similarity between the particle's observed value and the tracked object
+ * @compareWeight: compare funtion for sort algorithm in descending order
  * @objectid: the tracked object id
  * @MAX_PARTICLE_NUM: maximum partilce number
  * @particles: particle set
@@ -90,7 +92,7 @@ public:
 	void normalizeWeights();
 	void resample();
 	double getLikelihood();
-
+	bool compareWeight(const particle&,const particle&);
 	int objectid;
 	const int MAX_PARTICLE_NUM;
 	particle *particles;
@@ -104,14 +106,10 @@ ParticleFilter::ParticleFilter():MAX_PARTICLE_NUM(30){
 }
 
 void ParticleFilter::initialParticle() {
-
+	
 }
 
 double ParticleFilter::getLikelihood() {
-
-}
-
-void ParticleFilter::resample() {
 
 }
 
@@ -124,6 +122,39 @@ void ParticleFilter::normalizeWeights() {
 		particles[j].likelihood = particles[j].likelihood / sum;
 	}
 }
+
+bool ParticleFilter::compareWeight(const particle &a, const particle &b) {
+	return a.likelihood >= b.likelihood;
+}
+
+void ParticleFilter::resample() {
+	int number = 0;
+	int count = 0;
+	particle *tmp = new particle[MAX_PARTICLE_NUM];
+
+	for (int i = 0; i < MAX_PARTICLE_NUM; ++i) {
+		number = round(particles[i].likelihood * MAX_PARTICLE_NUM);
+		for (int j = 0; j < number; ++j) {
+			tmp[count++] = particles[i];
+			if(count == MAX_PARTICLE_NUM)
+				break;
+		}
+		if(count == MAX_PARTICLE_NUM)
+			break;
+	}
+
+	while(count < MAX_PARTICLE_NUM){
+		tmp[count] = particles[0];
+		count++;
+	}
+
+	for (int k = 0; k < MAX_PARTICLE_NUM; ++k) {
+		particles[k] = tmp[k];
+	}
+
+	delete tmp;
+}
+
 
 
 /*
