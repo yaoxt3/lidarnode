@@ -14,6 +14,12 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+#GSL
+find_package(GSL REQUIRED)
+include_directories(${GSL_INCLUDE_DIRS} ${GSLCBLAS_INCLUDE_DIRS})
+set(GSLLIB ${LIBS} ${GSL_LIBRARIES} ${GSLCBLAS_LIBRARIES})
+
+#OpenCV
 find_package(OpenCV 2 REQUIRED)
 include_directories(
   ${OpenCV_INCLUDE_DIRS}
@@ -23,11 +29,12 @@ catkin_package(
 )
 
 # editted by sam in 2018-1-17
-link_directories(${PCL_LIBRARY_DIRS} ${OpenCV_LIBRARY_DIRS})
+link_directories(${PCL_LIBRARY_DIRS} ${OpenCV_LIBRARY_DIRS} ${GSLLIB})
 
 add_executable(lidar src/lidar_main.cpp)
 target_link_libraries(lidar
    ${catkin_LIBRARIES}
    ${PCL_LIBRARIES}
    ${OpenCV_LIBS}
+        ${GSLLIB}
 )

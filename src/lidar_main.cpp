@@ -10,6 +10,7 @@
 #include <vector>
 #include <ctime>
 #include <sstream>
+#include <algorithm>
 #include <ros/ros.h>
 #include <opencv/cv.hpp>
 #include <opencv2/core/core.hpp>
@@ -95,6 +96,34 @@ public:
 	particle *particles;
 	gsl_rng *rng;
 };
+
+ParticleFilter::ParticleFilter():MAX_PARTICLE_NUM(30){
+	objectid = 0;
+	particles = new particle[MAX_PARTICLE_NUM];
+	rng = gsl_rng_alloc(gsl_rng_mt19937);
+}
+
+void ParticleFilter::initialParticle() {
+
+}
+
+double ParticleFilter::getLikelihood() {
+
+}
+
+void ParticleFilter::resample() {
+
+}
+
+void ParticleFilter::normalizeWeights() {
+	double sum = 0.0;
+	for (int i = 0; i < MAX_PARTICLE_NUM; ++i) {
+		sum += particles[i].likelihood;
+	}
+	for (int j = 0; j < MAX_PARTICLE_NUM; ++j) {
+		particles[j].likelihood = particles[j].likelihood / sum;
+	}
+}
 
 
 /*
@@ -277,7 +306,7 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 	for (int i = 0; i < pinfo.point_cluster_num; ++i) {
 		pinfo.cluster[i].pf->initialParticle();
 
-		pinfo.cluster[i].pf->getLikelihood();
+		double likelihood = pinfo.cluster[i].pf->getLikelihood();
 	}
 
 	mycloud = *mcluster;
