@@ -91,7 +91,7 @@ public:
 	void transition();
 	void normalizeWeights();
 	void resample();
-	double getLikelihood();
+	double getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree,const pcl::PointCloud<pcl::PointXYZI> *pointset);
 	bool compareWeight(const particle&,const particle&);
 	int objectid;
 	const int MAX_PARTICLE_NUM;
@@ -106,11 +106,35 @@ ParticleFilter::ParticleFilter():MAX_PARTICLE_NUM(30){
 }
 
 void ParticleFilter::initialParticle() {
-	
+
 }
 
-double ParticleFilter::getLikelihood() {
-
+double ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree, const pcl::PointCloud<pcl::PointXYZI> *pointset) {
+	vector<int>pointRadiusSearch;
+	vector<float>pointRadiusSquareDistance;
+	pcl::PointCloud<pcl::PointXYZI> pfpoint; // the point of the particle observed at the current positiosn
+	pfpoint.clear();
+	for (int i = 0; i < MAX_PARTICLE_NUM; ++i) {
+		pcl::PointXYZI point;
+		point.x = particles[i].x;
+		point.y = particles[i].y;
+		point.z = particles[i].z;
+		float radius;
+		radius = 0.5 * sqrt(point.x*point.x + point.y*point.y + point.z*point.z);
+		if(kdtree->radiusSearch(point,radius,pointRadiusSearch,pointRadiusSquareDistance) > 0){
+			for (int j = 0; j < pointRadiusSearch.size(); ++j) {
+				double dx = abs(pointset->points[pointRadiusSearch[j]].x - particles[i].width);
+				double dy = abs(pointset->points[pointRadiusSearch[j]].y - particles[i].height);
+				double dz = abs(pointset->points[pointRadiusSearch[j]].z - particles[i].longth);
+				if(dx > 0.5*particles[i].width || dy > 0.5*particles[i].height || dz > 0.5*particles[i].longth){
+					continue;
+				}
+				else{
+					pfpoint.push_back(pointset->points[pointRadiusSearch[j]]);
+				}
+			}
+		}
+	}
 }
 
 void ParticleFilter::normalizeWeights() {
@@ -166,7 +190,6 @@ void ParticleFilter::resample() {
  * calculate the moment invariant of the cluster by (height,width,longth)
  */
 struct cluster_info{
-	const int particle_num;
 	double center_x;
 	double center_y;
 	double center_z;
@@ -175,27 +198,23 @@ struct cluster_info{
 	double longth;
 	ParticleFilter *pf;
 	pcl::PointCloud<pcl::PointXYZI> points;
-	cluster_info():particle_num(30){
+	cluster_info(){
 		center_x = 0.0;
 		center_y = 0.0;
 		center_z = 0.0;
 		height = 0.0;
 		width = 0.0;
 		longth = 0.0;
-		//pf = new ParticleFilter;
 		points.clear();
 	}
 };
 
 /*
  * @point_cluster_num: the point cluster number
- * @index: the vector index of different point clusters
  * @cluster: store all pointcloud clusters in the current frame, and differentiate pointcloud clusters by different intensities
  */
 struct frame_info{
 	int point_cluster_num;
-//	int *index;
-//	pcl::PointCloud<pcl::PointXYZI> cluster;
 	cluster_info *cluster;
 	frame_info(){
 		point_cluster_num = 0;
@@ -294,19 +313,31 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
     extractor.setInputCloud(pointer);
     extractor.extract(cluster_indices);
 
+    pcl::search::KdTree<pcl::PointXYZI> vkdtree;
+    vkdtree = *kdtree;
+
+//    pcl::PointXYZI point1;
+//    float radius = 1.0;
+//    vector<int> a;
+//    vector<float> b;
+//    vkdtree.radiusSearch(point1,radius,a,b);
+
     cout << cluster_indices.size() << " clusters" << endl;
     pcl::PointCloud<pcl::PointXYZI> mycloud;
 
     frame_info pinfo;
     pinfo.point_cluster_num = cluster_indices.size();
     pinfo.cluster = new cluster_info[cluster_indices.size()];
-
+	for (int k = 0; k < cluster_indices.size(); ++k) {
+		pinfo.cluster[k].points.clear();
+	}
 	cout << "@@@" << endl;
     int j = 1;
     float intensity = 255.0f / cluster_indices.size();
     int point_nums = 0;
 
 	pcl::PointCloud<pcl::PointXYZI>::Ptr mcluster(new pcl::PointCloud<pcl::PointXYZI>); // use different intensities to differentiate point clusters
+	mcluster->clear();
 	for (vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin(); it != cluster_indices.end(); it++) {
         //cout << "in function " << endl;
         int cnt = 0;
