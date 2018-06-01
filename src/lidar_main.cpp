@@ -97,7 +97,8 @@ public:
 	gsl_rng *rng;
 };
 
-
+ParticleFilter::ParticleFilter() {}
+void ParticleFilter::initialParticle() {}
 /*
  * @cluster_xyz: the center position of the pointcloud cluster
  * @height: max(z) - min(z)
