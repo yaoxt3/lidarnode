@@ -85,7 +85,7 @@ struct particle{
 class ParticleFilter{
 public:
 	ParticleFilter();
-	void initialParticle();
+	void initialParticle(pcl::PointCloud<pcl::PointXYZI> points);
 	void transition();
 	void normalizeWeights();
 	void resample();
@@ -97,8 +97,54 @@ public:
 	gsl_rng *rng;
 };
 
-ParticleFilter::ParticleFilter() {}
-void ParticleFilter::initialParticle() {}
+ParticleFilter::ParticleFilter():MAX_PARTICLE_NUM(30){
+    particles=new particle[MAX_PARTICLE_NUM];
+}
+//initialize the particles
+void ParticleFilter::initialParticle(pcl::PointCloud<pcl::PointXYZI> points) {
+    //get the size of tracking object
+    size_t size = points.size();
+    pcl::PointXYZI center;
+    center.x=center.y=center.z=0;
+    float min_x=0,min_y=0,min_z=0;
+    float max_x=0,max_y=0,max_z=0;
+    for(size_t i=0;i<size;i++){
+        center.x+=points.points[i].x;
+        center.y+=points.points[i].y;
+        center.z+=points.points[i].z;
+        if(min_x>points.points[i].x) min_x=points.points[i].x;
+        if(min_y>points.points[i].y) min_y=points.points[i].y;
+        if(min_z>points.points[i].z) min_z=points.points[i].z;
+        if(max_x>points.points[i].x) max_x=points.points[i].x;
+        if(max_y>points.points[i].y) max_y=points.points[i].y;
+        if(max_z>points.points[i].z) max_z=points.points[i].z;
+    }
+    center.x/=(float)size;
+    center.y/=(float)size;
+    center.z/=(float)size;
+    float length=max_x-min_x;
+    float width=max_y-min_y;
+    float height=max_z-min_z;
+    //initialize the particles
+    const gsl_rng_type *T;
+    gsl_rng_env_setup();
+    T=gsl_rng_default;
+    rng=gsl_rng_alloc(T);
+    for(int i=0;i<MAX_PARTICLE_NUM;i++){
+        particles[i].height=height;
+        particles[i].width=width;
+        particles[i].longth=length;
+        particles[i].x=center.x+gsl_ran_gaussian(rng,0.4);
+        particles[i].y=center.y+gsl_ran_gaussian(rng,0.4);
+        particles[i].z=center.z+gsl_ran_gaussian(rng,0.4);
+    }
+}
+//transit the particles from previos frame
+void ParticleFilter::transition() {
+    for(int i=0;i<MAX_PARTICLE_NUM;i++){
+
+    }
+}
 /*
  * @cluster_xyz: the center position of the pointcloud cluster
  * @height: max(z) - min(z)
@@ -277,7 +323,7 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 
 	//particle filter section
 	for (int i = 0; i < pinfo.point_cluster_num; ++i) {
-		pinfo.cluster[i].pf->initialParticle();
+	//	pinfo.cluster[i].pf->initialParticle();
 	}
 
 	mycloud = *mcluster;
