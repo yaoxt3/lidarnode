@@ -110,6 +110,7 @@ void ParticleFilter::initialParticle() {
 }
 
 double ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree, const pcl::PointCloud<pcl::PointXYZI> *pointset) {
+	int *pf_intensity,*object_intensity;
 	vector<int>pointRadiusSearch;
 	vector<float>pointRadiusSquareDistance;
 	pcl::PointCloud<pcl::PointXYZI> pfpoint; // the point of the particle observed at the current positiosn
@@ -134,6 +135,23 @@ double ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *
 				}
 			}
 		}
+	}
+
+	object_intensity = new int[pointset->size()];
+	for (int i = 0; i < pointset->size(); ++i) {
+		object_intensity[i] = 0;
+	}
+	for (int j = 0; j < pfpoint.size(); ++j) {
+		pf_intensity[j] = 0;
+	}
+	pf_intensity = new int[pfpoint.size()];
+	for (int k = 0; k < pointset->size(); ++k) {
+		int intensity = round(pointset->points[k].intensity);
+		object_intensity[intensity] = object_intensity[intensity] + 1;
+	}
+	for (int l = 0; l < pfpoint.size(); ++l) {
+		int intensity = round(pfpoint.points[l].intensity);
+		pf_intensity[intensity] = pf_intensity[intensity] + 1;
 	}
 }
 
@@ -368,7 +386,7 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 	for (int i = 0; i < pinfo.point_cluster_num; ++i) {
 		pinfo.cluster[i].pf->initialParticle();
 
-		double likelihood = pinfo.cluster[i].pf->getLikelihood();
+//		double likelihood = pinfo.cluster[i].pf->getLikelihood();
 	}
 
 	mycloud = *mcluster;
