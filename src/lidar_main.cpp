@@ -141,8 +141,19 @@ void ParticleFilter::initialParticle(pcl::PointCloud<pcl::PointXYZI> points) {
 }
 //transit the particles from previos frame
 void ParticleFilter::transition() {
+    gsl_rng_env_setup();
+    const gsl_rng_type *T=gsl_rng_default;
+    rng=gsl_rng_alloc(T);
     for(int i=0;i<MAX_PARTICLE_NUM;i++){
-
+        float x=2.0*particles[i].x-particles[i].px+gsl_ran_gaussian(rng,0.4);
+        float y=2.0*particles[i].y-particles[i].py+gsl_ran_gaussian(rng,0.4);
+        float z=2.0*particles[i].z-particles[i].pz+gsl_ran_gaussian(rng,0.4);
+        particles[i].px=particles[i].x;
+        particles[i].py=particles[i].y;
+        particles[i].pz=particles[i].z;
+        particles[i].x=x;
+        particles[i].y=y;
+        particles[i].z=z;
     }
 }
 /*
