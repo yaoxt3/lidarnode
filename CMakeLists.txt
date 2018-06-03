@@ -20,7 +20,7 @@ include_directories(${GSL_INCLUDE_DIRS} ${GSLCBLAS_INCLUDE_DIRS})
 set(GSLLIB ${LIBS} ${GSL_LIBRARIES} ${GSLCBLAS_LIBRARIES})
 
 #OpenCV
-find_package(OpenCV 2 REQUIRED)
+find_package(OpenCV 3.3.1 REQUIRED)
 include_directories(
   ${OpenCV_INCLUDE_DIRS}
 )

@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/yxt/workspace/lidarnode/cmake-build-debug/devel/setup.sh

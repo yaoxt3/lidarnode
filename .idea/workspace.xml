@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
+    <generated>
+      <config projectName="lidar" targetName="topic_tools_generate_messages_nodejs" />
+      <config projectName="lidar" targetName="std_srvs_generate_messages_py" />
+      <config projectName="lidar" targetName="pcl_ros_gencfg" />
+      <config projectName="lidar" targetName="rosgraph_msgs_generate_messages_cpp" />
+      <config projectName="lidar" targetName="actionlib_msgs_generate_messages_lisp" />
+      <config projectName="lidar" targetName="geometry_msgs_generate_messages_eus" />
+      <config projectName="lidar" targetName="rosgraph_msgs_generate_messages_lisp" />
+      <config projectName="lidar" targetName="roscpp_generate_messages_py" />
+      <config projectName="lidar" targetName="tf2_msgs_generate_messages_eus" />
+      <config projectName="lidar" targetName="sensor_msgs_generate_messages_nodejs" />
+      <config projectName="lidar" targetName="dynamic_reconfigure_generate_messages_nodejs" />
+      <config projectName="lidar" targetName="std_msgs_generate_messages_eus" />
+      <config projectName="lidar" targetName="dynamic_reconfigure_generate_messages_lisp" />
+      <config projectName="lidar" targetName="sensor_msgs_generate_messages_cpp" />
+      <config projectName="lidar" targetName="actionlib_generate_messages_nodejs" />
+      <config projectName="lidar" targetName="clean_test_results" />
+      <config projectName="lidar" targetName="tf2_msgs_generate_messages_py" />
+      <config projectName="lidar" targetName="gtest" />
+      <config projectName="lidar" targetName="roscpp_generate_messages_lisp" />
+      <config projectName="lidar" targetName="rosgraph_msgs_generate_messages_py" />
+      <config projectName="lidar" targetName="geometry_msgs_generate_messages_cpp" />
+      <config projectName="lidar" targetName="std_srvs_generate_messages_lisp" />
+      <config projectName="lidar" targetName="std_msgs_generate_messages_nodejs" />
+      <config projectName="lidar" targetName="actionlib_msgs_generate_messages_py" />
+      <config projectName="lidar" targetName="nodelet_topic_tools_gencfg" />
+      <config projectName="lidar" targetName="run_tests" />
+      <config projectName="lidar" targetName="gtest_main" />
+      <config projectName="lidar" targetName="tf_generate_messages_eus" />
+      <config projectName="lidar" targetName="std_srvs_generate_messages_cpp" />
+      <config projectName="lidar" targetName="nodelet_generate_messages_nodejs" />
+      <config projectName="lidar" targetName="pcl_msgs_generate_messages_cpp" />
+      <config projectName="lidar" targetName="bond_generate_messages_nodejs" />
+      <config projectName="lidar" targetName="actionlib_msgs_generate_messages_nodejs" />
+      <config projectName="lidar" targetName="std_msgs_generate_messages_lisp" />
+      <config projectName="lidar" targetName="topic_tools_generate_messages_cpp" />
+      <config projectName="lidar" targetName="topic_tools_generate_messages_lisp" />
+      <config projectName="lidar" targetName="tf2_msgs_generate_messages_lisp" />
+      <config projectName="lidar" targetName="nodelet_generate_messages_eus" />
+      <config projectName="lidar" targetName="nodelet_generate_messages_py" />
+      <config projectName="lidar" targetName="roscpp_generate_messages_cpp" />
+      <config projectName="lidar" targetName="actionlib_generate_messages_lisp" />
+      <config projectName="lidar" targetName="bond_generate_messages_lisp" />
+      <config projectName="lidar" targetName="actionlib_generate_messages_cpp" />
+      <config projectName="lidar" targetName="sensor_msgs_generate_messages_lisp" />
+      <config projectName="lidar" targetName="rosgraph_msgs_generate_messages_nodejs" />
+      <config projectName="lidar" targetName="tf_generate_messages_nodejs" />
+      <config projectName="lidar" targetName="tf_generate_messages_py" />
+      <config projectName="lidar" targetName="dynamic_reconfigure_generate_messages_eus" />
+      <config projectName="lidar" targetName="bond_generate_messages_cpp" />
+      <config projectName="lidar" targetName="tf_generate_messages_cpp" />
+      <config projectName="lidar" targetName="std_srvs_generate_messages_eus" />
+      <config projectName="lidar" targetName="tf_generate_messages_lisp" />
+      <config projectName="lidar" targetName="actionlib_msgs_generate_messages_cpp" />
+      <config projectName="lidar" targetName="gmock" />
+      <config projectName="lidar" targetName="pcl_msgs_generate_messages_eus" />
+      <config projectName="lidar" targetName="topic_tools_generate_messages_eus" />
+      <config projectName="lidar" targetName="doxygen" />
+      <config projectName="lidar" targetName="nodelet_generate_messages_cpp" />
+      <config projectName="lidar" targetName="roscpp_generate_messages_eus" />
+      <config projectName="lidar" targetName="lidar" />
+      <config projectName="lidar" targetName="dynamic_reconfigure_gencfg" />
+      <config projectName="lidar" targetName="bond_generate_messages_py" />
+      <config projectName="lidar" targetName="actionlib_generate_messages_eus" />
+      <config projectName="lidar" targetName="rosgraph_msgs_generate_messages_eus" />
+      <config projectName="lidar" targetName="topic_tools_generate_messages_py" />
+      <config projectName="lidar" targetName="dynamic_reconfigure_generate_messages_py" />
+      <config projectName="lidar" targetName="gmock_main" />
+      <config projectName="lidar" targetName="pcl_msgs_generate_messages_nodejs" />
+      <config projectName="lidar" targetName="dynamic_reconfigure_generate_messages_cpp" />
+      <config projectName="lidar" targetName="sensor_msgs_generate_messages_py" />
+      <config projectName="lidar" targetName="roscpp_generate_messages_nodejs" />
+      <config projectName="lidar" targetName="bond_generate_messages_eus" />
+      <config projectName="lidar" targetName="std_srvs_generate_messages_nodejs" />
+      <config projectName="lidar" targetName="geometry_msgs_generate_messages_lisp" />
+      <config projectName="lidar" targetName="tf2_msgs_generate_messages_cpp" />
+      <config projectName="lidar" targetName="pcl_msgs_generate_messages_py" />
+      <config projectName="lidar" targetName="actionlib_generate_messages_py" />
+      <config projectName="lidar" targetName="tf2_msgs_generate_messages_nodejs" />
+      <config projectName="lidar" targetName="std_msgs_generate_messages_py" />
+      <config projectName="lidar" targetName="pcl_msgs_generate_messages_lisp" />
+      <config projectName="lidar" targetName="actionlib_msgs_generate_messages_eus" />
+      <config projectName="lidar" targetName="geometry_msgs_generate_messages_py" />
+      <config projectName="lidar" targetName="nodelet_generate_messages_lisp" />
+      <config projectName="lidar" targetName="std_msgs_generate_messages_cpp" />
+      <config projectName="lidar" targetName="download_extra_data" />
+      <config projectName="lidar" targetName="geometry_msgs_generate_messages_nodejs" />
+      <config projectName="lidar" targetName="tests" />
+      <config projectName="lidar" targetName="sensor_msgs_generate_messages_eus" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bcbb74a8-b8e0-40a6-8081-73ae7f741196" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret line="28" column="1" selection-start-line="28" selection-start-column="1" selection-end-line="28" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="lidar_main.cpp" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/lidar_main.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="324">
+              <caret line="96" column="25" selection-start-line="96" selection-start-column="25" selection-end-line="96" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="115" />
+    <option name="y" value="54" />
+    <option name="width" value="1559" />
+    <option name="height" value="1000" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="lidar" type="b2602c69:ProjectViewProjectNode" />
+              <item name="lidarnode" type="47feb1d3:ProjectViewModuleNode" />
+            </path>
+            <path>
+              <item name="lidar" type="b2602c69:ProjectViewProjectNode" />
+              <item name="lidarnode" type="47feb1d3:ProjectViewModuleNode" />
+              <item name="lidarnode" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="lidar" type="b2602c69:ProjectViewProjectNode" />
+              <item name="lidarnode" type="47feb1d3:ProjectViewModuleNode" />
+              <item name="lidarnode" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.lidar">
+    <configuration name="Build All" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" EXPLICIT_BUILD_TARGET_NAME="all" />
+    <configuration name="actionlib_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="actionlib_generate_messages_cpp" CONFIG_NAME="Debug" />
+    <configuration name="actionlib_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="actionlib_generate_messages_eus" CONFIG_NAME="Debug" />
+    <configuration name="actionlib_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="actionlib_generate_messages_lisp" CONFIG_NAME="Debug" />
+    <configuration name="actionlib_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="actionlib_generate_messages_nodejs" CONFIG_NAME="Debug" />
+    <configuration name="actionlib_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="actionlib_generate_messages_py" CONFIG_NAME="Debug" />
+    <configuration name="actionlib_msgs_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="actionlib_msgs_generate_messages_cpp" CONFIG_NAME="Debug" />
+    <configuration name="actionlib_msgs_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="actionlib_msgs_generate_messages_eus" CONFIG_NAME="Debug" />
+    <configuration name="actionlib_msgs_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="actionlib_msgs_generate_messages_lisp" CONFIG_NAME="Debug" />
+    <configuration name="actionlib_msgs_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="actionlib_msgs_generate_messages_nodejs" CONFIG_NAME="Debug" />
+    <configuration name="actionlib_msgs_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="actionlib_msgs_generate_messages_py" CONFIG_NAME="Debug" />
+    <configuration name="bond_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="bond_generate_messages_cpp" CONFIG_NAME="Debug" />
+    <configuration name="bond_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="bond_generate_messages_eus" CONFIG_NAME="Debug" />
+    <configuration name="bond_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="bond_generate_messages_lisp" CONFIG_NAME="Debug" />
+    <configuration name="bond_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="bond_generate_messages_nodejs" CONFIG_NAME="Debug" />
+    <configuration name="bond_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="bond_generate_messages_py" CONFIG_NAME="Debug" />
+    <configuration name="clean_test_results" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="clean_test_results" CONFIG_NAME="Debug" />
+    <configuration name="download_extra_data" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="download_extra_data" CONFIG_NAME="Debug" />
+    <configuration name="doxygen" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="doxygen" CONFIG_NAME="Debug" />
+    <configuration name="dynamic_reconfigure_gencfg" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="dynamic_reconfigure_gencfg" CONFIG_NAME="Debug" />
+    <configuration name="dynamic_reconfigure_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="dynamic_reconfigure_generate_messages_cpp" CONFIG_NAME="Debug" />
+    <configuration name="dynamic_reconfigure_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="dynamic_reconfigure_generate_messages_eus" CONFIG_NAME="Debug" />
+    <configuration name="dynamic_reconfigure_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="dynamic_reconfigure_generate_messages_lisp" CONFIG_NAME="Debug" />
+    <configuration name="dynamic_reconfigure_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="dynamic_reconfigure_generate_messages_nodejs" CONFIG_NAME="Debug" />
+    <configuration name="dynamic_reconfigure_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="dynamic_reconfigure_generate_messages_py" CONFIG_NAME="Debug" />
+    <configuration name="geometry_msgs_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="geometry_msgs_generate_messages_cpp" CONFIG_NAME="Debug" />
+    <configuration name="geometry_msgs_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="geometry_msgs_generate_messages_eus" CONFIG_NAME="Debug" />
+    <configuration name="geometry_msgs_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="geometry_msgs_generate_messages_lisp" CONFIG_NAME="Debug" />
+    <configuration name="geometry_msgs_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="geometry_msgs_generate_messages_nodejs" CONFIG_NAME="Debug" />
+    <configuration name="geometry_msgs_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="geometry_msgs_generate_messages_py" CONFIG_NAME="Debug" />
+    <configuration name="gmock" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="gmock" CONFIG_NAME="Debug" />
+    <configuration name="gmock_main" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="gmock_main" CONFIG_NAME="Debug" />
+    <configuration name="gtest" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="gtest" CONFIG_NAME="Debug" />
+    <configuration name="gtest_main" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="gtest_main" CONFIG_NAME="Debug" />
+    <configuration name="lidar" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="lidar" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="lidar" RUN_TARGET_NAME="lidar" />
+    <configuration name="nodelet_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="nodelet_generate_messages_cpp" CONFIG_NAME="Debug" />
+    <configuration name="nodelet_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="nodelet_generate_messages_eus" CONFIG_NAME="Debug" />
+    <configuration name="nodelet_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="nodelet_generate_messages_lisp" CONFIG_NAME="Debug" />
+    <configuration name="nodelet_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="nodelet_generate_messages_nodejs" CONFIG_NAME="Debug" />
+    <configuration name="nodelet_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="nodelet_generate_messages_py" CONFIG_NAME="Debug" />
+    <configuration name="nodelet_topic_tools_gencfg" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="nodelet_topic_tools_gencfg" CONFIG_NAME="Debug" />
+    <configuration name="pcl_msgs_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="pcl_msgs_generate_messages_cpp" CONFIG_NAME="Debug" />
+    <configuration name="pcl_msgs_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="pcl_msgs_generate_messages_eus" CONFIG_NAME="Debug" />
+    <configuration name="pcl_msgs_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="pcl_msgs_generate_messages_lisp" CONFIG_NAME="Debug" />
+    <configuration name="pcl_msgs_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="pcl_msgs_generate_messages_nodejs" CONFIG_NAME="Debug" />
+    <configuration name="pcl_msgs_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="pcl_msgs_generate_messages_py" CONFIG_NAME="Debug" />
+    <configuration name="pcl_ros_gencfg" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="pcl_ros_gencfg" CONFIG_NAME="Debug" />
+    <configuration name="roscpp_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="roscpp_generate_messages_cpp" CONFIG_NAME="Debug" />
+    <configuration name="roscpp_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="roscpp_generate_messages_eus" CONFIG_NAME="Debug" />
+    <configuration name="roscpp_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="roscpp_generate_messages_lisp" CONFIG_NAME="Debug" />
+    <configuration name="roscpp_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="roscpp_generate_messages_nodejs" CONFIG_NAME="Debug" />
+    <configuration name="roscpp_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="roscpp_generate_messages_py" CONFIG_NAME="Debug" />
+    <configuration name="rosgraph_msgs_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="rosgraph_msgs_generate_messages_cpp" CONFIG_NAME="Debug" />
+    <configuration name="rosgraph_msgs_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="rosgraph_msgs_generate_messages_eus" CONFIG_NAME="Debug" />
+    <configuration name="rosgraph_msgs_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="rosgraph_msgs_generate_messages_lisp" CONFIG_NAME="Debug" />
+    <configuration name="rosgraph_msgs_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="rosgraph_msgs_generate_messages_nodejs" CONFIG_NAME="Debug" />
+    <configuration name="rosgraph_msgs_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="rosgraph_msgs_generate_messages_py" CONFIG_NAME="Debug" />
+    <configuration name="run_tests" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="run_tests" CONFIG_NAME="Debug" />
+    <configuration name="sensor_msgs_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="sensor_msgs_generate_messages_cpp" CONFIG_NAME="Debug" />
+    <configuration name="sensor_msgs_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="sensor_msgs_generate_messages_eus" CONFIG_NAME="Debug" />
+    <configuration name="sensor_msgs_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="sensor_msgs_generate_messages_lisp" CONFIG_NAME="Debug" />
+    <configuration name="sensor_msgs_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="sensor_msgs_generate_messages_nodejs" CONFIG_NAME="Debug" />
+    <configuration name="sensor_msgs_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="sensor_msgs_generate_messages_py" CONFIG_NAME="Debug" />
+    <configuration name="std_msgs_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="std_msgs_generate_messages_cpp" CONFIG_NAME="Debug" />
+    <configuration name="std_msgs_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="std_msgs_generate_messages_eus" CONFIG_NAME="Debug" />
+    <configuration name="std_msgs_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="std_msgs_generate_messages_lisp" CONFIG_NAME="Debug" />
+    <configuration name="std_msgs_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="std_msgs_generate_messages_nodejs" CONFIG_NAME="Debug" />
+    <configuration name="std_msgs_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="std_msgs_generate_messages_py" CONFIG_NAME="Debug" />
+    <configuration name="std_srvs_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="std_srvs_generate_messages_cpp" CONFIG_NAME="Debug" />
+    <configuration name="std_srvs_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="std_srvs_generate_messages_eus" CONFIG_NAME="Debug" />
+    <configuration name="std_srvs_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="std_srvs_generate_messages_lisp" CONFIG_NAME="Debug" />
+    <configuration name="std_srvs_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="std_srvs_generate_messages_nodejs" CONFIG_NAME="Debug" />
+    <configuration name="std_srvs_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="std_srvs_generate_messages_py" CONFIG_NAME="Debug" />
+    <configuration name="tests" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="tests" CONFIG_NAME="Debug" />
+    <configuration name="tf2_msgs_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="tf2_msgs_generate_messages_cpp" CONFIG_NAME="Debug" />
+    <configuration name="tf2_msgs_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="tf2_msgs_generate_messages_eus" CONFIG_NAME="Debug" />
+    <configuration name="tf2_msgs_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="tf2_msgs_generate_messages_lisp" CONFIG_NAME="Debug" />
+    <configuration name="tf2_msgs_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="tf2_msgs_generate_messages_nodejs" CONFIG_NAME="Debug" />
+    <configuration name="tf2_msgs_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="tf2_msgs_generate_messages_py" CONFIG_NAME="Debug" />
+    <configuration name="tf_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="tf_generate_messages_cpp" CONFIG_NAME="Debug" />
+    <configuration name="tf_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="tf_generate_messages_eus" CONFIG_NAME="Debug" />
+    <configuration name="tf_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="tf_generate_messages_lisp" CONFIG_NAME="Debug" />
+    <configuration name="tf_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="tf_generate_messages_nodejs" CONFIG_NAME="Debug" />
+    <configuration name="tf_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="tf_generate_messages_py" CONFIG_NAME="Debug" />
+    <configuration name="topic_tools_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="topic_tools_generate_messages_cpp" CONFIG_NAME="Debug" />
+    <configuration name="topic_tools_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="topic_tools_generate_messages_eus" CONFIG_NAME="Debug" />
+    <configuration name="topic_tools_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="topic_tools_generate_messages_lisp" CONFIG_NAME="Debug" />
+    <configuration name="topic_tools_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="topic_tools_generate_messages_nodejs" CONFIG_NAME="Debug" />
+    <configuration name="topic_tools_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="lidar" TARGET_NAME="topic_tools_generate_messages_py" CONFIG_NAME="Debug" />
+    <list>
+      <item itemvalue="Application.Build All" />
+      <item itemvalue="Application.actionlib_generate_messages_cpp" />
+      <item itemvalue="Application.actionlib_generate_messages_eus" />
+      <item itemvalue="Application.actionlib_generate_messages_lisp" />
+      <item itemvalue="Application.actionlib_generate_messages_nodejs" />
+      <item itemvalue="Application.actionlib_generate_messages_py" />
+      <item itemvalue="Application.actionlib_msgs_generate_messages_cpp" />
+      <item itemvalue="Application.actionlib_msgs_generate_messages_eus" />
+      <item itemvalue="Application.actionlib_msgs_generate_messages_lisp" />
+      <item itemvalue="Application.actionlib_msgs_generate_messages_nodejs" />
+      <item itemvalue="Application.actionlib_msgs_generate_messages_py" />
+      <item itemvalue="Application.bond_generate_messages_cpp" />
+      <item itemvalue="Application.bond_generate_messages_eus" />
+      <item itemvalue="Application.bond_generate_messages_lisp" />
+      <item itemvalue="Application.bond_generate_messages_nodejs" />
+      <item itemvalue="Application.bond_generate_messages_py" />
+      <item itemvalue="Application.clean_test_results" />
+      <item itemvalue="Application.download_extra_data" />
+      <item itemvalue="Application.doxygen" />
+      <item itemvalue="Application.dynamic_reconfigure_gencfg" />
+      <item itemvalue="Application.dynamic_reconfigure_generate_messages_cpp" />
+      <item itemvalue="Application.dynamic_reconfigure_generate_messages_eus" />
+      <item itemvalue="Application.dynamic_reconfigure_generate_messages_lisp" />
+      <item itemvalue="Application.dynamic_reconfigure_generate_messages_nodejs" />
+      <item itemvalue="Application.dynamic_reconfigure_generate_messages_py" />
+      <item itemvalue="Application.geometry_msgs_generate_messages_cpp" />
+      <item itemvalue="Application.geometry_msgs_generate_messages_eus" />
+      <item itemvalue="Application.geometry_msgs_generate_messages_lisp" />
+      <item itemvalue="Application.geometry_msgs_generate_messages_nodejs" />
+      <item itemvalue="Application.geometry_msgs_generate_messages_py" />
+      <item itemvalue="Application.lidar" />
+      <item itemvalue="Application.nodelet_generate_messages_cpp" />
+      <item itemvalue="Application.nodelet_generate_messages_eus" />
+      <item itemvalue="Application.nodelet_generate_messages_lisp" />
+      <item itemvalue="Application.nodelet_generate_messages_nodejs" />
+      <item itemvalue="Application.nodelet_generate_messages_py" />
+      <item itemvalue="Application.nodelet_topic_tools_gencfg" />
+      <item itemvalue="Application.pcl_msgs_generate_messages_cpp" />
+      <item itemvalue="Application.pcl_msgs_generate_messages_eus" />
+      <item itemvalue="Application.pcl_msgs_generate_messages_lisp" />
+      <item itemvalue="Application.pcl_msgs_generate_messages_nodejs" />
+      <item itemvalue="Application.pcl_msgs_generate_messages_py" />
+      <item itemvalue="Application.pcl_ros_gencfg" />
+      <item itemvalue="Application.roscpp_generate_messages_cpp" />
+      <item itemvalue="Application.roscpp_generate_messages_eus" />
+      <item itemvalue="Application.roscpp_generate_messages_lisp" />
+      <item itemvalue="Application.roscpp_generate_messages_nodejs" />
+      <item itemvalue="Application.roscpp_generate_messages_py" />
+      <item itemvalue="Application.rosgraph_msgs_generate_messages_cpp" />
+      <item itemvalue="Application.rosgraph_msgs_generate_messages_eus" />
+      <item itemvalue="Application.rosgraph_msgs_generate_messages_lisp" />
+      <item itemvalue="Application.rosgraph_msgs_generate_messages_nodejs" />
+      <item itemvalue="Application.rosgraph_msgs_generate_messages_py" />
+      <item itemvalue="Application.run_tests" />
+      <item itemvalue="Application.sensor_msgs_generate_messages_cpp" />
+      <item itemvalue="Application.sensor_msgs_generate_messages_eus" />
+      <item itemvalue="Application.sensor_msgs_generate_messages_lisp" />
+      <item itemvalue="Application.sensor_msgs_generate_messages_nodejs" />
+      <item itemvalue="Application.sensor_msgs_generate_messages_py" />
+      <item itemvalue="Application.std_msgs_generate_messages_cpp" />
+      <item itemvalue="Application.std_msgs_generate_messages_eus" />
+      <item itemvalue="Application.std_msgs_generate_messages_lisp" />
+      <item itemvalue="Application.std_msgs_generate_messages_nodejs" />
+      <item itemvalue="Application.std_msgs_generate_messages_py" />
+      <item itemvalue="Application.std_srvs_generate_messages_cpp" />
+      <item itemvalue="Application.std_srvs_generate_messages_eus" />
+      <item itemvalue="Application.std_srvs_generate_messages_lisp" />
+      <item itemvalue="Application.std_srvs_generate_messages_nodejs" />
+      <item itemvalue="Application.std_srvs_generate_messages_py" />
+      <item itemvalue="Application.tests" />
+      <item itemvalue="Application.tf2_msgs_generate_messages_cpp" />
+      <item itemvalue="Application.tf2_msgs_generate_messages_eus" />
+      <item itemvalue="Application.tf2_msgs_generate_messages_lisp" />
+      <item itemvalue="Application.tf2_msgs_generate_messages_nodejs" />
+      <item itemvalue="Application.tf2_msgs_generate_messages_py" />
+      <item itemvalue="Application.tf_generate_messages_cpp" />
+      <item itemvalue="Application.tf_generate_messages_eus" />
+      <item itemvalue="Application.tf_generate_messages_lisp" />
+      <item itemvalue="Application.tf_generate_messages_nodejs" />
+      <item itemvalue="Application.tf_generate_messages_py" />
+      <item itemvalue="Application.topic_tools_generate_messages_cpp" />
+      <item itemvalue="Application.topic_tools_generate_messages_eus" />
+      <item itemvalue="Application.topic_tools_generate_messages_lisp" />
+      <item itemvalue="Application.topic_tools_generate_messages_nodejs" />
+      <item itemvalue="Application.topic_tools_generate_messages_py" />
+      <item itemvalue="Application.gmock" />
+      <item itemvalue="Application.gmock_main" />
+      <item itemvalue="Application.gtest" />
+      <item itemvalue="Application.gtest_main" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bcbb74a8-b8e0-40a6-8081-73ae7f741196" name="Default" comment="" />
+      <created>1528031362331</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1528031362331</updated>
+      <workItem from="1528031365084" duration="157000" />
+      <workItem from="1528032064929" duration="2096000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="2253000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="115" y="54" width="1559" height="1000" extended-state="0" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22450289" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Messages" weight="0.3295325" />
+      <window_info anchor="bottom" id="CMake" order="7" weight="0.331813" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.17217788" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="572">
+          <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="28" column="1" selection-start-line="28" selection-start-column="1" selection-end-line="28" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lidar_main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="96" column="25" selection-start-line="96" selection-start-column="25" selection-end-line="96" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
