@@ -134,25 +134,50 @@ double ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *
 					pfpoint.push_back(pointset->points[pointRadiusSearch[j]]);
 				}
 			}
+
+			int maxSize = max(pointset->size(),pfpoint.size());
+			int maxpointset = 0, maxpf = 0;
+			int minpointset = 10000, minpf = 10000;
+			object_intensity = new int[maxSize];
+			pf_intensity = new int[maxSize];
+			for (int i = 0; i < maxSize; ++i) {
+				object_intensity[i] = 0;
+				pf_intensity[i] = 0;
+			}
+			for (int k = 0; k < maxSize; ++k) {
+				int intensity = round(pointset->points[k].intensity);
+				object_intensity[intensity] = object_intensity[intensity] + 1;
+				if(intensity > maxpointset)
+					maxpointset = intensity;
+				if(intensity < minpointset)
+					minpointset = intensity;
+
+				int intensity2 = round(pfpoint.points[k].intensity);
+				pf_intensity[intensity2] = pf_intensity[intensity2] + 1;
+				if(intensity2 > maxpf)
+					maxpf = intensity2;
+				if(intensity2 < minpf)
+					minpf = intensity2;
+			}
+
+			// calculate the similarity by point number and intensity
+			float pnumWeight = 0.0;
+			float intensityWeight = 0.0;
+
+			float similarity = 0.0;
+			for (int m = 0; m < maxSize; ++m) {
+				intensityWeight = intensityWeight + sqrt(object_intensity[m]*pf_intensity[m]);
+			}
+			intensityWeight = -log(intensityWeight);
+
+
+
+
+			particles[i].likelihood = similarity;
 		}
 	}
 
-	object_intensity = new int[pointset->size()];
-	for (int i = 0; i < pointset->size(); ++i) {
-		object_intensity[i] = 0;
-	}
-	for (int j = 0; j < pfpoint.size(); ++j) {
-		pf_intensity[j] = 0;
-	}
-	pf_intensity = new int[pfpoint.size()];
-	for (int k = 0; k < pointset->size(); ++k) {
-		int intensity = round(pointset->points[k].intensity);
-		object_intensity[intensity] = object_intensity[intensity] + 1;
-	}
-	for (int l = 0; l < pfpoint.size(); ++l) {
-		int intensity = round(pfpoint.points[l].intensity);
-		pf_intensity[intensity] = pf_intensity[intensity] + 1;
-	}
+
 }
 
 void ParticleFilter::normalizeWeights() {
