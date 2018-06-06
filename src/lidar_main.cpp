@@ -57,9 +57,9 @@ struct particle{
 	double x0;
 	double y0;
 	double z0;
-	double height;
-	double width;
-	double longth;
+    double width;  // x
+	double height; // y
+	double longth; // z
 	double likelihood;
 	pcl::PointCloud<pcl::PointXYZI> observed_value;
 	particle(){
@@ -87,11 +87,11 @@ struct particle{
 class ParticleFilter{
 public:
 	ParticleFilter();
-	void initialParticle();
+	void initialParticle(const pcl::PointCloud<pcl::PointXYZI> *points);
 	void transition();
 	void normalizeWeights();
 	void resample();
-	double getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree,const pcl::PointCloud<pcl::PointXYZI> *pointset);
+	void getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree,const pcl::PointCloud<pcl::PointXYZI> *pointset);
 	bool compareWeight(const particle&,const particle&);
 	int objectid;
 	const int MAX_PARTICLE_NUM;
@@ -105,11 +105,45 @@ ParticleFilter::ParticleFilter():MAX_PARTICLE_NUM(30){
 	rng = gsl_rng_alloc(gsl_rng_mt19937);
 }
 
-void ParticleFilter::initialParticle() {
+double Max(double a, double b)
+{
+    return a >= b ? a : b;
+}
+
+double Min(double a, double b)
+{
+    return a <= b ? a : b;
+}
+
+void ParticleFilter::initialParticle(const pcl::PointCloud<pcl::PointXYZI> *points) {
+    double maxWidth=0.0, minWidth=10000.0;
+    double maxHeight=0.0, minHeight=10000.0;
+    double maxLongth=0.0, minLongth=10000.0;
+    double mean_x=0.0, mean_y=0.0, mean_z=0.0;
+    for (int i = 0; i < points->size(); ++i) {
+        maxWidth = Max(maxWidth,points->points[i].x);
+        maxLongth = Max(maxLongth, points->points[i].y);
+        maxHeight = Max(maxHeight,points->points[i].z);
+        minWidth = Min(minWidth,points->points[i].x);
+        minLongth = Min(minLongth, points->points[i].y);
+        minHeight = Min(minHeight,points->points[i].z);
+        mean_x += points->points[i].x;
+        mean_y += points->points[i].y;
+        mean_z += points->points[i].z;
+    }
+
+    for (int j = 0; j < MAX_PARTICLE_NUM; ++j) {
+        this->particles[j].width = maxWidth - minWidth;
+        this->particles[j].height = maxHeight - minHeight;
+        this->particles[j].longth = maxLongth - minLongth;
+        this->particles[j].x0 = mean_x / points->size();
+        this->particles[j].y0 = mean_y / points->size();
+        this->particles[j].z0 = mean_z / points->size();
+    }
 
 }
 
-double ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree, const pcl::PointCloud<pcl::PointXYZI> *pointset) {
+void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree, const pcl::PointCloud<pcl::PointXYZI> *pointset) {
 	int *pf_intensity,*object_intensity;
 	vector<int>pointRadiusSearch;
 	vector<float>pointRadiusSquareDistance;
@@ -171,14 +205,14 @@ double ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *
 			numWeight = pfpoint.size()/pointset->points.size();
 			similarity = numWeight * intensityWeight;
 
-
-
-
+			/*
+			 * need consider more methods to calculate likelihood, for example:
+			 * compare particle's point distribution and object's point distribution.
+			 */
 
 			particles[i].likelihood = similarity;
 		}
 	}
-
 
 }
 
@@ -270,11 +304,9 @@ class Lidar_node{
 public:
     Lidar_node();
 	// function
-	void cluster_function(const pcl::PointCloud<pcl::PointXYZI> *pointset);
 	void processPointCloud(const sensor_msgs::PointCloud2 &scan);
 	void TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset);
 	float calculate_distance2(const pcl::PointXYZI a, const pcl::PointXYZI b);
-	void find_center(const pcl::PointCloud<pcl::PointXYZI> *pointset, pcl::PointCloud<pcl::PointXYZI> *cluster_center);
 private:
     ros::NodeHandle node_handle_;
     ros::Subscriber points_node_sub_;
@@ -282,7 +314,6 @@ private:
     ros::Publisher test_points_pub_;
 
     // set left-right threshold for y-axis in lidar coordinate
-    int cluster_k; // cluster center's number
 	int frame_id;
 	const int frame_num;
 	const int searchNum;
@@ -290,7 +321,6 @@ private:
     float right_threshold;
     float forward_threshold;
     float forward_max_threshold;
-    vector<float > vmin_dist;
     vector<frame_info > frame_points; // record three frames information
 };
 
@@ -301,7 +331,6 @@ Lidar_node::Lidar_node():searchNum(100),frame_num(3){ // error : node_handle_("~
     right_threshold = 2;
     forward_threshold = 0.25;
     forward_max_threshold = 3;
-    cluster_k = 6;
     frame_id = 0;
     frame_points.clear();
     points_node_sub_ = node_handle_.subscribe("velodyne_points", 1028, &Lidar_node::processPointCloud, this);
@@ -411,7 +440,7 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 
 	//particle filter section
 	for (int i = 0; i < pinfo.point_cluster_num; ++i) {
-		pinfo.cluster[i].pf->initialParticle();
+		pinfo.cluster[i].pf->initialParticle(&pinfo.cluster[i].points);
 
 //		double likelihood = pinfo.cluster[i].pf->getLikelihood();
 	}
@@ -434,70 +463,6 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
     }
 }
 
-/*
-  -cluster function-
-  algorithm: kmeans++ & ISODATA
-*/
-void Lidar_node::find_center(const pcl::PointCloud<pcl::PointXYZI> *pointset, pcl::PointCloud<pcl::PointXYZI> *cluster_center) {
-    size_t size = pointset->size();
-    int init_pos = rand()%size; // initialization position
-    cluster_center->points.push_back(pointset->points[init_pos]);
-
-  /*
-  kmeans++:
-  1.for each point, find the nearest cluster center, calculate the distance 'dist(i)'
-  2.for i-point, the bigger dist(i) is, the bigger probabilty of i-point will be selected
-  3.if i-point is selected, it becomes a new cluster center
-  4.continue above steps, until k cluster centers are selected
-  5.kmeans algorithm beginning...
-  */
-    int num = 1;
-    while (num < cluster_k) {
-      int pos = 0;
-
-      float dist_sum = 0.0;
-      float probabilty = 0.0;
-      float prob_sum = 0.0;
-      vmin_dist.clear();
-      for (size_t i = 0; i < size; i++) {
-        float min_dist = 999999999;
-        for (size_t j = 0; j < cluster_center->size(); j++) { // find the max distance between i-th point and k cluster centers
-          float dist = calculate_distance2(cluster_center->points[j],pointset->points[i]);
-          if (min_dist > dist) {
-            min_dist = dist;
-          }
-        }
-        vmin_dist.push_back(min_dist);
-        dist_sum += min_dist;
-      }
-      for (size_t i = 0; i < size; i++) {
-        vmin_dist[i] /= dist_sum;
-      }
-      probabilty = (rand()%size)/(float)size;
-      //cout << "prob: " << probabilty << endl;
-      size_t vsize = vmin_dist.size();
-      for (size_t i = 0; i < vsize; i++) {
-        prob_sum += vmin_dist[i];
-        if (prob_sum >= probabilty) {
-          //cout << "prob_sum: " << prob_sum << endl;
-          pos = i;  // get a new cluster center
-          break;
-        }
-      }
-      //cout << " pos: " << pos << endl;
-      cluster_center->points.push_back(pointset->points[pos]);
-      num++;
-    }
-    //cout << cluster_center->size() << endl;
-    //cout << "-----------------------" << endl;
-}
-
-void Lidar_node::cluster_function(const pcl::PointCloud<pcl::PointXYZI> *pointset){
-    pcl::PointCloud<pcl::PointXYZI> cluster_center; // cluster centers
-    find_center(pointset,&cluster_center);
-    //cout<<"cluster:"<<cluster_center.size()<<endl;
-
-}
 
 // extract pointclouds from different bags, and publish them by topic "point_cloud"
 void Lidar_node::processPointCloud(const sensor_msgs::PointCloud2 &scan) {
