@@ -136,8 +136,6 @@ double ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *
 			}
 
 			int maxSize = max(pointset->size(),pfpoint.size());
-			int maxpointset = 0, maxpf = 0;
-			int minpointset = 10000, minpf = 10000;
 			object_intensity = new int[maxSize];
 			pf_intensity = new int[maxSize];
 			for (int i = 0; i < maxSize; ++i) {
@@ -147,28 +145,32 @@ double ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *
 			for (int k = 0; k < maxSize; ++k) {
 				int intensity = round(pointset->points[k].intensity);
 				object_intensity[intensity] = object_intensity[intensity] + 1;
-				if(intensity > maxpointset)
-					maxpointset = intensity;
-				if(intensity < minpointset)
-					minpointset = intensity;
 
 				int intensity2 = round(pfpoint.points[k].intensity);
 				pf_intensity[intensity2] = pf_intensity[intensity2] + 1;
-				if(intensity2 > maxpf)
-					maxpf = intensity2;
-				if(intensity2 < minpf)
-					minpf = intensity2;
+			}
+
+			//normalization
+			float *fobject_intensity = new float[maxSize];
+			float *fpf_intensity = new float[maxSize];
+			for (int l = 0; l < maxSize; ++l) {
+				fobject_intensity[l] = object_intensity[l]*1.0/pointset->size();
+				fpf_intensity[l] = pf_intensity[l]*1.0/pfpoint.size();
 			}
 
 			// calculate the similarity by point number and intensity
-			float pnumWeight = 0.0;
+			float numWeight = 0.0;
 			float intensityWeight = 0.0;
-
 			float similarity = 0.0;
 			for (int m = 0; m < maxSize; ++m) {
-				intensityWeight = intensityWeight + sqrt(object_intensity[m]*pf_intensity[m]);
+				intensityWeight = intensityWeight + sqrt(fobject_intensity[m]*fpf_intensity[m]);
 			}
-			intensityWeight = -log(intensityWeight);
+			intensityWeight = 1 - intensityWeight;
+			intensityWeight = exp(-1.0*intensityWeight);
+
+			numWeight = pfpoint.size()/pointset->points.size();
+			similarity = numWeight * intensityWeight;
+
 
 
 
