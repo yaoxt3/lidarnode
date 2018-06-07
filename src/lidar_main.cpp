@@ -73,27 +73,32 @@ struct particle{
 };
 
 /*
- * @initialParticle: initialize particle's state
- * @transition: update the current particle's state by previous state
- * @normalizeWeights: normalize particle's weights
- * @resample: resampling the particles to keep the diversity of particles
- * @getLikelihood: calculate the similarity between the particle's observed value and the tracked object
- * @compareWeight: compare funtion for sort algorithm in descending order
- * @objectid: the tracked object id
- * @MAX_PARTICLE_NUM: maximum partilce number
+ * @initialParticle: initialize particle's state.
+ * @transition: update the current particle's state by previous state.
+ * @normalizeWeights: normalize particle's weights.
+ * @resample: resampling the particles to keep the diversity of particles.
+ * @getLikelihood: calculate the similarity between the particle's observed value and the tracked object.
+ * @compareWeight: compare funtion for sort algorithm in descending order.
+ * @objectid: the tracked object id.
+ * @std_x,std_y,std_z: standard deviation.
+ * @A0,A1,B: coefficient of transition function.
+ * @MAX_PARTICLE_NUM: maximum partilce number.
  * @particles: particle set
  * @rng: gsl library variable to generate guassian-distribution number
  */
 class ParticleFilter{
 public:
 	ParticleFilter();
+	~ParticleFilter();
 	void initialParticle(const pcl::PointCloud<pcl::PointXYZI> *points);
-	void transition();
+	particle transition(particle p);
 	void normalizeWeights();
 	void resample();
 	void getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree,const pcl::PointCloud<pcl::PointXYZI> *pointset);
 	bool compareWeight(const particle&,const particle&);
 	int objectid;
+	double std_x,std_y,std_z;
+	double A0,A1,B;
 	const int MAX_PARTICLE_NUM;
 	particle *particles;
 	gsl_rng *rng;
@@ -101,8 +106,22 @@ public:
 
 ParticleFilter::ParticleFilter():MAX_PARTICLE_NUM(30){
 	objectid = 0;
+	std_x = 1.0;
+	std_y = 0.6;
+	std_z = 1.3;
+	A0 = 2.0;
+	A1 = -1.0;
+	B = 1.0;
 	particles = new particle[MAX_PARTICLE_NUM];
+	gsl_rng_env_setup();
 	rng = gsl_rng_alloc(gsl_rng_mt19937);
+	gsl_rng_set(rng,time(NULL));
+}
+
+ParticleFilter::~ParticleFilter()
+{
+    delete []particles;
+    gsl_rng_free(rng);
 }
 
 double Max(double a, double b)
@@ -132,6 +151,7 @@ void ParticleFilter::initialParticle(const pcl::PointCloud<pcl::PointXYZI> *poin
         mean_z += points->points[i].z;
     }
 
+    // initilize particle's position
     for (int j = 0; j < MAX_PARTICLE_NUM; ++j) {
         this->particles[j].width = maxWidth - minWidth;
         this->particles[j].height = maxHeight - minHeight;
@@ -139,8 +159,42 @@ void ParticleFilter::initialParticle(const pcl::PointCloud<pcl::PointXYZI> *poin
         this->particles[j].x0 = mean_x / points->size();
         this->particles[j].y0 = mean_y / points->size();
         this->particles[j].z0 = mean_z / points->size();
+        this->particles[j].x = this->particles[j].x0;
+        this->particles[j].y = this->particles[j].y0;
+        this->particles[j].z = this->particles[j].z0;
+        this->particles[j].px = this->particles[j].x;
+        this->particles[j].py = this->particles[j].y;
+        this->particles[j].pz = this->particles[j].z;
     }
 
+}
+
+/*
+ * x[t+1] - x[t] = x[t] - x[t-1] + N(0,1)
+ * x[t+1] = 2x[t] - x[t-1] + N(0,1)
+ */
+particle ParticleFilter::transition(particle p) {
+    particle next_p;
+    double next_x = A0*(p.x-p.x0)+A1*(p.px-p.x0)+B*gsl_ran_gaussian(rng,std_x)+p.x0;
+    double next_y = A0*(p.y-p.y0)+A1*(p.py-p.y0)+B*gsl_ran_gaussian(rng,std_y)+p.y0;
+    double next_z = A0*(p.z-p.z0)+A1*(p.pz-p.z0)+B*gsl_ran_gaussian(rng,std_z)+p.z0;
+
+    next_p.x = next_x;
+    next_p.y = next_y;
+    next_p.z = next_z;
+    next_p.px = p.x;
+    next_p.py = p.y;
+    next_p.pz = p.z;
+    next_p.x0 = p.x0;
+    next_p.y0 = p.y0;
+    next_p.z0 = p.z0;
+    next_p.longth = p.longth;
+    next_p.width = p.width;
+    next_p.height = p.height;
+    next_p.likelihood = 0.0;
+    next_p.observed_value.clear();
+
+    return next_p;
 }
 
 void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree, const pcl::PointCloud<pcl::PointXYZI> *pointset) {
@@ -213,7 +267,6 @@ void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kd
 			particles[i].likelihood = similarity;
 		}
 	}
-
 }
 
 void ParticleFilter::normalizeWeights() {
@@ -503,6 +556,7 @@ void Lidar_node::processPointCloud(const sensor_msgs::PointCloud2 &scan) {
 int main(int argc, char **argv) {
     cout<<111<<endl;
     srand(time(NULL));
+
     ros::init(argc,argv,"Lidar_node");
     Lidar_node node;
     ros::spin();
