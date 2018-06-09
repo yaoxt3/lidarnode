@@ -109,8 +109,8 @@ public:
 ParticleFilter::ParticleFilter():MAX_PARTICLE_NUM(30){
 	objectid = 0;
 	std_x = 1.0;
-	std_y = 0.6;
-	std_z = 1.3;
+	std_y = 1.5;
+	std_z = 0.3;
 	A0 = 2.0;
 	A1 = -1.0;
 	B = 1.0;
@@ -211,13 +211,16 @@ void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kd
 		point.y = particles[i].y;
 		point.z = particles[i].z;
 		float radius;
-		radius = 0.5 * sqrt(point.x*point.x + point.y*point.y + point.z*point.z);
+		float width = particles[i].width;
+		float height = particles[i].height;
+		float longth = particles[i].longth;
+		radius = 0.5 * sqrt(width*width + height*height + longth*longth);
 		if(kdtree->radiusSearch(point,radius,pointRadiusSearch,pointRadiusSquareDistance) > 0){
 			for (int j = 0; j < pointRadiusSearch.size(); ++j) {
-				double dx = abs(pointset->points[pointRadiusSearch[j]].x - particles[i].width);
-				double dy = abs(pointset->points[pointRadiusSearch[j]].y - particles[i].height);
-				double dz = abs(pointset->points[pointRadiusSearch[j]].z - particles[i].longth);
-				if(dx > 0.5*particles[i].width || dy > 0.5*particles[i].height || dz > 0.5*particles[i].longth){
+				double dx = abs(pointset->points[pointRadiusSearch[j]].x - width);
+				double dy = abs(pointset->points[pointRadiusSearch[j]].y - height);
+				double dz = abs(pointset->points[pointRadiusSearch[j]].z - longth);
+				if(dx > 0.5*width || dy > 0.5*height || dz > 0.5*longth){
 					continue;
 				}
 				else{
