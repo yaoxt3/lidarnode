@@ -91,10 +91,12 @@ public:
 	ParticleFilter();
 	~ParticleFilter();
 	void initialParticle(const pcl::PointCloud<pcl::PointXYZI> *points);
-	particle transition(particle p);
+	void transition();
 	void normalizeWeights();
 	void resample();
 	void getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree,const pcl::PointCloud<pcl::PointXYZI> *pointset);
+	void printAllParticle();
+	void printThisParticle(int);
 	bool compareWeight(const particle&,const particle&);
 	int objectid;
 	double std_x,std_y,std_z;
@@ -173,35 +175,35 @@ void ParticleFilter::initialParticle(const pcl::PointCloud<pcl::PointXYZI> *poin
  * x[t+1] - x[t] = x[t] - x[t-1] + N(0,1)
  * x[t+1] = 2x[t] - x[t-1] + N(0,1)
  */
-particle ParticleFilter::transition(particle p) {
-    particle next_p;
-    double next_x = A0*(p.x-p.x0)+A1*(p.px-p.x0)+B*gsl_ran_gaussian(rng,std_x)+p.x0;
-    double next_y = A0*(p.y-p.y0)+A1*(p.py-p.y0)+B*gsl_ran_gaussian(rng,std_y)+p.y0;
-    double next_z = A0*(p.z-p.z0)+A1*(p.pz-p.z0)+B*gsl_ran_gaussian(rng,std_z)+p.z0;
+void ParticleFilter::transition() {
+	for (int i = 0; i < MAX_PARTICLE_NUM; ++i) {
+		particle p = particles[i];
+		double next_x = A0*(p.x-p.x0)+A1*(p.px-p.x0)+B*gsl_ran_gaussian(rng,std_x)+p.x0;
+		double next_y = A0*(p.y-p.y0)+A1*(p.py-p.y0)+B*gsl_ran_gaussian(rng,std_y)+p.y0;
+		double next_z = A0*(p.z-p.z0)+A1*(p.pz-p.z0)+B*gsl_ran_gaussian(rng,std_z)+p.z0;
 
-    next_p.x = next_x;
-    next_p.y = next_y;
-    next_p.z = next_z;
-    next_p.px = p.x;
-    next_p.py = p.y;
-    next_p.pz = p.z;
-    next_p.x0 = p.x0;
-    next_p.y0 = p.y0;
-    next_p.z0 = p.z0;
-    next_p.longth = p.longth;
-    next_p.width = p.width;
-    next_p.height = p.height;
-    next_p.likelihood = 0.0;
-    next_p.observed_value.clear();
-
-    return next_p;
+		particles[i].px = p.x;
+		particles[i].py = p.y;
+		particles[i].pz = p.z;
+		particles[i].x = next_x;
+		particles[i].y = next_y;
+		particles[i].z = next_z;
+		particles[i].x0 = p.x0;
+		particles[i].y0 = p.y0;
+		particles[i].z0 = p.z0;
+		particles[i].longth = p.longth;
+		particles[i].width = p.width;
+		particles[i].height = p.height;
+		particles[i].likelihood = 0.0;
+		particles[i].observed_value.clear();
+	}
 }
 
 void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree, const pcl::PointCloud<pcl::PointXYZI> *pointset) {
 	int *pf_intensity,*object_intensity;
 	vector<int>pointRadiusSearch;
 	vector<float>pointRadiusSquareDistance;
-	pcl::PointCloud<pcl::PointXYZI> pfpoint; // the point of the particle observed at the current positiosn
+	pcl::PointCloud<pcl::PointXYZI> pfpoint; // observed points at the current position
 	pfpoint.clear();
 	for (int i = 0; i < MAX_PARTICLE_NUM; ++i) {
 		pcl::PointXYZI point;
@@ -267,6 +269,26 @@ void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kd
 			particles[i].likelihood = similarity;
 		}
 	}
+}
+
+void ParticleFilter::printAllParticle() {
+	for (int i = 0; i < MAX_PARTICLE_NUM; ++i) {
+		cout << "particle: " << i << ":" << endl;
+		cout << "current position:";
+		cout << "(" << particles[i].x << "," << particles[i].y << "," << particles[i].z << ")" << endl;
+		cout << "likelihood:" << particles[i].likelihood << endl;
+		cout << "original position:";
+		cout << "(" << particles[i].x0 << "," << particles[i].y0 << "," << particles[i].z0 << ")" << endl;
+	}
+}
+
+void ParticleFilter::printThisParticle(int i) {
+	cout << "particle: " << i << ":" << endl;
+	cout << "current position:";
+	cout << "(" << particles[i].x << "," << particles[i].y << "," << particles[i].z << ")" << endl;
+	cout << "likelihood:" << particles[i].likelihood << endl;
+	cout << "original position:";
+	cout << "(" << particles[i].x0 << "," << particles[i].y0 << "," << particles[i].z0 << ")" << endl;
 }
 
 void ParticleFilter::normalizeWeights() {
@@ -433,7 +455,7 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 
     vector<pcl::PointIndices > cluster_indices;
     pcl::EuclideanClusterExtraction<pcl::PointXYZI > extractor;
-    extractor.setClusterTolerance(0.08);
+    extractor.setClusterTolerance(0.05);
     extractor.setMinClusterSize(5);
     extractor.setMaxClusterSize(5000);
     extractor.setSearchMethod(kdtree);
@@ -474,6 +496,7 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
             point.y = pointer->points[*pit].y;
             point.z = pointer->points[*pit].z;
             point.intensity = intensity * j;
+           	//point.intensity = pointer->points[*pit].intensity;
             pinfo.cluster[j-1].points.push_back(point);
             mcluster->points.push_back(point);
 		    cnt ++;
@@ -491,11 +514,28 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
         j++;
 	}
 
-	//particle filter section
-	for (int i = 0; i < pinfo.point_cluster_num; ++i) {
-		pinfo.cluster[i].pf->initialParticle(&pinfo.cluster[i].points);
 
-//		double likelihood = pinfo.cluster[i].pf->getLikelihood();
+	/*##particle filter section
+	 * initialize particles in the first frame, otherwise process previous particles
+	 * this takes three steps:
+	 * 1.transition according to a certain motion model
+	 * 2.observing the likelihood of the object being at the translated position (results in a weight)
+	 * 3.re-sample according to that likelihood (given by the weight)
+	 */
+	if(frame_id == 0){
+		for (int i = 0; i < pinfo.point_cluster_num; ++i) {
+			pinfo.cluster[i].pf->objectid = i;
+			pinfo.cluster[i].pf->initialParticle(&pinfo.cluster[i].points);
+		}
+	}
+	else{
+		int id = frame_id >= 3 ? 1 : (frame_id%3)-1;
+		for (int i = 0; i < frame_points[id].point_cluster_num; ++i) {
+			frame_points[id].cluster[i].pf->transition();
+			frame_points[id].cluster[i].pf->getLikelihood(&vkdtree,&frame_points[id].cluster[i].points);
+			frame_points[id].cluster[i].pf->normalizeWeights();
+			frame_points[id].cluster[i].pf->resample();
+		}
 	}
 
 	mycloud = *mcluster;
