@@ -105,14 +105,15 @@ public:
 	double std_x,std_y,std_z;
 	double A0,A1,B;
 	static const int MAX_PARTICLE_NUM = 30;
+	static const int MAX_INTENSITY = 50;
 	particle *particles;
 	gsl_rng *rng;
 };
 
 ParticleFilter::ParticleFilter(){
 	objectid = 0;
-	std_x = 1.0;
-	std_y = 1.5;
+	std_x = 0.55;
+	std_y = 0.45;
 	std_z = 0.3;
 	A0 = 2.0;
 	A1 = -1.0;
@@ -204,30 +205,40 @@ void ParticleFilter::transition() {
 void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree, const pcl::PointCloud<pcl::PointXYZI> *pointset, const pcl::PointCloud<pcl::PointXYZI> *mypoint) {
 	cout << "likelihood function." << endl;
 	int *pf_intensity,*object_intensity;
-	vector<int>pointRadiusSearch;
-	vector<float>pointRadiusSquareDistance;
+	vector<int> pointRadiusSearch;
+	vector<float> pointRadiusSquareDistance;
 	pcl::PointCloud<pcl::PointXYZI> pfpoint; // observed points at the current position
-	pfpoint.clear();
 	for (int i = 0; i < MAX_PARTICLE_NUM; ++i) {
-		pcl::PointXYZI point;
-		point.x = particles[i].x;
-		point.y = particles[i].y;
-		point.z = particles[i].z;
-		float radius;
+		cout << endl;
+		cout << "particle: " << i << endl;
+		pointRadiusSearch.clear();
+		pointRadiusSquareDistance.clear();
+		pfpoint.clear();
+		pcl::PointXYZI point0;
+		point0.x = particles[i].x;
+		point0.y = particles[i].y;
+		point0.z = particles[i].z;
+		const pcl::PointXYZI point = point0;
+		double radius;
 		float width = particles[i].width;
 		float height = particles[i].height;
 		float longth = particles[i].longth;
 		cout << width << " " << height << " " << longth << endl;
+		cout << "(" << point.x << "," << point.y << "," << point.z << ")" << endl;
 		radius = 0.5 * sqrt(width*width + height*height + longth*longth);
 		cout << "radius: " << radius << endl;
-		if(kdtree->radiusSearch(point,radius,pointRadiusSearch,pointRadiusSquareDistance) > 0){
+
+		int result = kdtree->radiusSearch(point,radius,pointRadiusSearch,pointRadiusSquareDistance);
+		cout << result << endl;
+		if(result > 0){
 			cout << "in if section." << endl;
 			cout << "num: " << pointRadiusSearch.size() << endl;
 			for (int j = 0; j < pointRadiusSearch.size(); ++j) {
-				double dx = abs(pointset->points[pointRadiusSearch[j]].x - width);
-				double dy = abs(pointset->points[pointRadiusSearch[j]].y - height);
-				double dz = abs(pointset->points[pointRadiusSearch[j]].z - longth);
-				cout << dx << " " << dy << " " << dz << endl;
+				double dx = abs(pointset->points[pointRadiusSearch[j]].x - point.x);
+				double dy = abs(pointset->points[pointRadiusSearch[j]].y - point.y);
+				double dz = abs(pointset->points[pointRadiusSearch[j]].z - point.z);
+				//cout << dx << " " << dy << " " << dz << endl;
+				//cout << "(" << pointset->points[pointRadiusSearch[j]].x << "," << pointset->points[pointRadiusSearch[j]].y <<","<< pointset->points[pointRadiusSearch[j]].z << ")" << endl;
 				if(dx > 0.5*width || dy > 0.5*height || dz > 0.5*longth){
 					continue;
 				}
@@ -239,24 +250,27 @@ void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kd
 				cout << "!!" << endl;
 				int maxSize = max(mypoint->size(),pfpoint.size());
 				cout << maxSize << " " << mypoint->size() << " " << pfpoint.size() << endl;
-				object_intensity = new int[maxSize];
-				pf_intensity = new int[maxSize];
-				for (int i = 0; i < maxSize; ++i) {
+				object_intensity = new int[MAX_INTENSITY];
+				pf_intensity = new int[MAX_INTENSITY];
+				for (int i = 0; i < MAX_INTENSITY; ++i) {
 					object_intensity[i] = 0;
 					pf_intensity[i] = 0;
 				}
-				for (int k = 0; k < maxSize; ++k) {
-					int intensity = round(mypoint->points[k].intensity);
-					object_intensity[intensity] = object_intensity[intensity] + 1;
 
-					int intensity2 = round(pfpoint.points[k].intensity);
-					pf_intensity[intensity2] = pf_intensity[intensity2] + 1;
+				for (int j = 0; j < mypoint->size(); ++j) {
+					int intensity = round(mypoint->points[j].intensity);
+					object_intensity[intensity] = object_intensity[intensity] + 1;
 				}
+				for (int k = 0; k < pfpoint.size(); ++k) {
+					int intensity = round(pfpoint.points[k].intensity);
+					pf_intensity[intensity] = pf_intensity[intensity] + 1;
+				}
+
 				cout << "@@" << endl;
 				//normalization
-				float *fobject_intensity = new float[maxSize];
-				float *fpf_intensity = new float[maxSize];
-				for (int l = 0; l < maxSize; ++l) {
+				float *fobject_intensity = new float[MAX_INTENSITY];
+				float *fpf_intensity = new float[MAX_INTENSITY];
+				for (int l = 0; l < MAX_INTENSITY; ++l) {
 					fobject_intensity[l] = object_intensity[l]*1.0/mypoint->size();
 					fpf_intensity[l] = pf_intensity[l]*1.0/pfpoint.size();
 				}
@@ -265,13 +279,14 @@ void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kd
 				float numWeight = 0.0;
 				float intensityWeight = 0.0;
 				float similarity = 0.0;
-				for (int m = 0; m < maxSize; ++m) {
+				for (int m = 0; m < MAX_INTENSITY; ++m) {
 					intensityWeight = intensityWeight + sqrt(fobject_intensity[m]*fpf_intensity[m]);
 				}
 				intensityWeight = 1 - intensityWeight;
 				intensityWeight = exp(-1.0*intensityWeight);
 
-				numWeight = pfpoint.size()/mypoint->points.size();
+				cout << "intw: " << intensityWeight << endl;
+				numWeight = pfpoint.size()*1.0/mypoint->points.size();
 				similarity = numWeight * intensityWeight;
 
 				/*
@@ -280,9 +295,12 @@ void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kd
 				 */
 
 				particles[i].likelihood = similarity;
+				cout << "likelihood: " << similarity << endl;
 			}
-		} else
+		} else{
 			particles[i].likelihood = 0.0;
+		}
+
 	}
 }
 
@@ -425,7 +443,7 @@ private:
     float right_threshold;
     float forward_threshold;
     float forward_max_threshold;
-    vector<frame_info > frame_points; // record three frames information
+    vector<frame_info> frame_points; // record three frames information
 };
 
 
