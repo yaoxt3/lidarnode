@@ -94,7 +94,8 @@ public:
 	void transition();
 	void normalizeWeights();
 	void resample();
-	void getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree,const pcl::PointCloud<pcl::PointXYZI> *pointset, const pcl::PointCloud<pcl::PointXYZI> *mypoint);
+//	void getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree,const pcl::PointCloud<pcl::PointXYZI> *pointset, const pcl::PointCloud<pcl::PointXYZI> *mypoint);
+	void getLikelihood(const pcl::KdTreeFLANN<pcl::PointXYZI> *kdtree,const pcl::PointCloud<pcl::PointXYZI> *pointset, const pcl::PointCloud<pcl::PointXYZI> *mypoint);
 	pcl::PointXYZ getPosition();
 	void printAllParticle();
 	void printThisParticle(int);
@@ -202,13 +203,14 @@ void ParticleFilter::transition() {
 	}
 }
 
-void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree, const pcl::PointCloud<pcl::PointXYZI> *pointset, const pcl::PointCloud<pcl::PointXYZI> *mypoint) {
+//void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree, const pcl::PointCloud<pcl::PointXYZI> *pointset, const pcl::PointCloud<pcl::PointXYZI> *mypoint) {
+void ParticleFilter::getLikelihood(const pcl::KdTreeFLANN<pcl::PointXYZI> *kdtree, const pcl::PointCloud<pcl::PointXYZI> *pointset, const pcl::PointCloud<pcl::PointXYZI> *mypoint) {
 	cout << "likelihood function." << endl;
-	int *pf_intensity,*object_intensity;
-	vector<int> pointRadiusSearch;
-	vector<float> pointRadiusSquareDistance;
-	pcl::PointCloud<pcl::PointXYZI> pfpoint; // observed points at the current position
 	for (int i = 0; i < MAX_PARTICLE_NUM; ++i) {
+		int *pf_intensity,*object_intensity;
+		vector<int> pointRadiusSearch;
+		vector<float> pointRadiusSquareDistance;
+		pcl::PointCloud<pcl::PointXYZI> pfpoint; // observed points at the current position
 		cout << endl;
 		cout << "particle: " << i << endl;
 		pointRadiusSearch.clear();
@@ -219,7 +221,7 @@ void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kd
 		point0.y = particles[i].y;
 		point0.z = particles[i].z;
 		const pcl::PointXYZI point = point0;
-		double radius;
+		float radius;
 		float width = particles[i].width;
 		float height = particles[i].height;
 		float longth = particles[i].longth;
@@ -252,9 +254,9 @@ void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kd
 				cout << maxSize << " " << mypoint->size() << " " << pfpoint.size() << endl;
 				object_intensity = new int[MAX_INTENSITY];
 				pf_intensity = new int[MAX_INTENSITY];
-				for (int i = 0; i < MAX_INTENSITY; ++i) {
-					object_intensity[i] = 0;
-					pf_intensity[i] = 0;
+				for (int ii = 0; ii < MAX_INTENSITY; ++ii) {
+					object_intensity[ii] = 0;
+					pf_intensity[ii] = 0;
 				}
 
 				for (int j = 0; j < mypoint->size(); ++j) {
@@ -498,7 +500,9 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 
     // KD tree to construct point cloud
     pcl::search::KdTree<pcl::PointXYZI>::Ptr kdtree(new pcl::search::KdTree<pcl::PointXYZI>);
+    pcl::KdTreeFLANN<pcl::PointXYZI> kdtree1;
     kdtree->setInputCloud(pointer);
+    kdtree1.setInputCloud(pointer);
 
     vector<pcl::PointIndices > cluster_indices;
     pcl::EuclideanClusterExtraction<pcl::PointXYZI > extractor;
@@ -596,7 +600,7 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 			//frame_points[id].cluster[i].pf->printAllParticle();
 			cout << "transition." << endl;
 
-			frame_points[id].cluster[i].pf->getLikelihood(&vkdtree,&pinfo.allpoints,&frame_points[id].cluster[i].points);
+			frame_points[id].cluster[i].pf->getLikelihood(&kdtree1,&pinfo.allpoints,&frame_points[id].cluster[i].points);
 			cout << "likelihood." << endl;
 
 			frame_points[id].cluster[i].pf->normalizeWeights();
