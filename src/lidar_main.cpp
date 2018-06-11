@@ -387,7 +387,6 @@ bool compareWeight(const sortparticle &a,const sortparticle &b){
 void ParticleFilter::resample() {
 	int number = 0;
 	int count = 0;
-	//particle *cparticles = new particle[MAX_PARTICLE_NUM];
 	sortparticle *cparticles = new sortparticle[MAX_PARTICLE_NUM];
 	for (int l = 0; l < MAX_PARTICLE_NUM; ++l) {
 		cparticles[l].particleid = l;
@@ -412,14 +411,13 @@ void ParticleFilter::resample() {
 			cparticles[m] = temp;
 		}
 	}
-	//particle *tmp = new particle[MAX_PARTICLE_NUM];
-	//sort(cparticles,cparticles+MAX_PARTICLE_NUM*sizeof(sortparticle),compareWeight);
-	for (int k = 0; k < MAX_PARTICLE_NUM; ++k) {
-		cout <<"particle " <<  k << ":" << endl;
-		cout << cparticles[k].particleid << " " << cparticles[k].likelihood << endl;
-		cout << "----------------" << endl;
-	}
+//	for (int k = 0; k < MAX_PARTICLE_NUM; ++k) {
+//		cout <<"particle " <<  k << ":" << endl;
+//		cout << cparticles[k].particleid << " " << cparticles[k].likelihood << endl;
+//		cout << "----------------" << endl;
+//	}
 
+	// replicating particles according to likelihood(weight)
 	sortparticle *tmp = new sortparticle[MAX_PARTICLE_NUM];
 	for (int i = 0; i < MAX_PARTICLE_NUM; ++i) {
 		number = round(cparticles[i].likelihood * MAX_PARTICLE_NUM);
@@ -437,12 +435,24 @@ void ParticleFilter::resample() {
 		count++;
 	}
 
-//	for (int k = 0; k < MAX_PARTICLE_NUM; ++k) {
-//		particles[k] = tmp[k];
-//	}
+	particle *tmpf = new particle[MAX_PARTICLE_NUM];
+	for (int k = 0; k < MAX_PARTICLE_NUM; ++k) {
+		tmpf[k] = particles[k];
+	}
+	for (int i = 0; i < MAX_PARTICLE_NUM; ++i) {
+		particles[i] = tmpf[tmp[i].particleid];
+	}
 
+	/*
+	for (int j = 0; j < MAX_PARTICLE_NUM; ++j) {
+		cout << "particle " << j << ": " << endl;
+		cout << "(" << particles[j].x << "," << particles[j].y << "," << particles[j].z << ")" << endl;
+		cout << "likelihood :" << particles[j].likelihood << endl;
+	}
+	*/
 	delete []cparticles;
 	delete []tmp;
+	delete []tmpf;
 	cout << "end sample." << endl;
 }
 
