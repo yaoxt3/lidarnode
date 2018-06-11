@@ -224,8 +224,8 @@ void ParticleFilter::transition() {
 void ParticleFilter::getLikelihood(const pcl::KdTreeFLANN<pcl::PointXYZI> *kdtree,const pcl::PointCloud<pcl::PointXYZI> *pointset,const pcl::PointCloud<pcl::PointXYZI> *mypoint) {
 	cout << "likelihood function." << endl;
 	for (int i = 0; i < MAX_PARTICLE_NUM; ++i) {
-		cout << endl;
-		cout << "particle: " << i << endl;
+//		cout << endl;
+//		cout << "particle: " << i << endl;
 		pcl::PointCloud<pcl::PointXYZI> pfpoint; // observed points at the current position
 		vector<int> pointRadiusSearch;
 		vector<float> pointRadiusSquareDistance;
@@ -234,8 +234,8 @@ void ParticleFilter::getLikelihood(const pcl::KdTreeFLANN<pcl::PointXYZI> *kdtre
 		pointRadiusSquareDistance.clear();
 //		vector<int> (pointRadiusSearch).swap(pointRadiusSearch);
 //		vector<float> (pointRadiusSquareDistance).swap(pointRadiusSquareDistance);
-		cout << "radius capacity:" << pointRadiusSearch.capacity() << endl;
-		cout << "dis capacity:" << pointRadiusSquareDistance.capacity() << endl;
+//		cout << "radius capacity:" << pointRadiusSearch.capacity() << endl;
+//		cout << "dis capacity:" << pointRadiusSquareDistance.capacity() << endl;
 		pcl::PointXYZI point0;
 		point0.x = particles[i].x;
 		point0.y = particles[i].y;
@@ -245,16 +245,16 @@ void ParticleFilter::getLikelihood(const pcl::KdTreeFLANN<pcl::PointXYZI> *kdtre
 		float width = particles[i].width;
 		float height = particles[i].height;
 		float longth = particles[i].longth;
-		cout << width << " " << height << " " << longth << endl;
-		cout << "(" << point.x << "," << point.y << "," << point.z << ")" << endl;
+//		cout << width << " " << height << " " << longth << endl;
+//		cout << "(" << point.x << "," << point.y << "," << point.z << ")" << endl;
 		radius = 0.5 * sqrt(width*width + height*height + longth*longth);
-		cout << "radius: " << radius << endl;
+//		cout << "radius: " << radius << endl;
 
 		int result = kdtree->radiusSearch(point,radius,pointRadiusSearch,pointRadiusSquareDistance,0);
-		cout << result << endl;
+//		cout << result << endl;
 		if(result > 0){
-			cout << "in if section." << endl;
-			cout << "num: " << pointRadiusSearch.size() << endl;
+//			cout << "in if section." << endl;
+//			cout << "num: " << pointRadiusSearch.size() << endl;
 			for (int j = 0; j < pointRadiusSearch.size(); ++j) {
 				//cout << "kdtree_for:" << j << endl;
 				double dx = abs(pointset->points[pointRadiusSearch[j]].x - point.x);
@@ -266,15 +266,15 @@ void ParticleFilter::getLikelihood(const pcl::KdTreeFLANN<pcl::PointXYZI> *kdtre
 					continue;
 				}
 				else{
-					cout << "push_back." << endl;
+//					cout << "push_back." << endl;
 					pcl::PointXYZI points = pointset->points[pointRadiusSearch[j]];
 					pfpoint.push_back(points);
 				}
 			}
 			if(pfpoint.size() > 0){
-				cout << "!!" << endl;
+//				cout << "!!" << endl;
 				int maxSize = max(mypoint->size(),pfpoint.size());
-				cout << maxSize << " " << mypoint->size() << " " << pfpoint.size() << endl;
+//				cout << maxSize << " " << mypoint->size() << " " << pfpoint.size() << endl;
 				int *object_intensity = new int[MAX_INTENSITY];
 				int *pf_intensity = new int[MAX_INTENSITY];
 				for (int ii = 0; ii < MAX_INTENSITY; ++ii) {
@@ -291,7 +291,7 @@ void ParticleFilter::getLikelihood(const pcl::KdTreeFLANN<pcl::PointXYZI> *kdtre
 					pf_intensity[intensity] = pf_intensity[intensity] + 1;
 				}
 
-				cout << "@@" << endl;
+//				cout << "@@" << endl;
 				//normalization
 				float *fobject_intensity = new float[MAX_INTENSITY];
 				float *fpf_intensity = new float[MAX_INTENSITY];
@@ -392,7 +392,7 @@ void ParticleFilter::resample() {
 	for (int l = 0; l < MAX_PARTICLE_NUM; ++l) {
 		cparticles[l].particleid = l;
 		cparticles[l].likelihood = particles[l].likelihood;
-		cout << "particle " << l << " likelihood " << cparticles[l].likelihood << endl;
+//		cout << "particle " << l << " likelihood " << cparticles[l].likelihood << endl;
 	}
 	// sort in descending order
 	for (int m = 0; m < MAX_PARTICLE_NUM; ++m) {
@@ -444,6 +444,7 @@ void ParticleFilter::resample() {
 		particles[i] = tmpf[tmp[i].particleid];
 	}
 
+	/*
 	for (int j = 0; j < MAX_PARTICLE_NUM; ++j) {
 		cout << "particle " << j << ": " << endl;
 		cout << "(" << particles[j].x << "," << particles[j].y << "," << particles[j].z << ")" << endl;
@@ -454,6 +455,7 @@ void ParticleFilter::resample() {
 		}
 		cout << "-------------------" << endl;
 	}
+	*/
 	delete []cparticles;
 	delete []tmp;
 	delete []tmpf;
@@ -714,7 +716,13 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 				cout << "Cluster No." << k << endl;
 				cout << "(" << pinfo.cluster[k].center_x << "," << pinfo.cluster[k].center_y << "," << pinfo.cluster[k].center_z << ")" << endl;
 			}
-			while(1);
+			int next;
+			while(1){
+				cout << "input 1 to process program" << endl;
+				cin >> next;
+				if(next==1)
+					break;
+			}
 		}
 	}
 
