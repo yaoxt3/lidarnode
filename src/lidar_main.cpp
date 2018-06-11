@@ -62,6 +62,7 @@ struct particle{
 	double longth; // z
 	double likelihood;
 	pcl::PointCloud<pcl::PointXYZI> observed_value;
+
 	particle(){
 		x = y = z = 0.0;
 		px = py = pz = 0.0;
@@ -69,6 +70,26 @@ struct particle{
 		height = width = longth = 0.0;
 		likelihood = 0.0;
 		observed_value.clear();
+	}
+	particle(const particle& one) {
+		x = one.x; y = one.y; z = one.z;
+		px = one.px; py = one.py; pz = one.pz;
+		x0 = one.x0; y0 = one.y0; z0 = one.z0;
+		height = one.height;
+		width = one.width;
+		longth = one.longth;
+		likelihood = one.likelihood;
+		observed_value = one.observed_value;
+	}
+	particle& operator =(const particle& one){
+		x = one.x; y = one.y; z = one.z;
+		px = one.px; py = one.py; pz = one.pz;
+		x0 = one.x0; y0 = one.y0; z0 = one.z0;
+		height = one.height;
+		width = one.width;
+		longth = one.longth;
+		likelihood = one.likelihood;
+		observed_value = one.observed_value;
 	}
 };
 
@@ -95,18 +116,15 @@ public:
 	void normalizeWeights();
 	void resample();
 //	void getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree,const pcl::PointCloud<pcl::PointXYZI> *pointset, const pcl::PointCloud<pcl::PointXYZI> *mypoint);
-	void getLikelihood(const pcl::KdTreeFLANN<pcl::PointXYZI> *kdtree,const pcl::PointCloud<pcl::PointXYZI> *pointset, const pcl::PointCloud<pcl::PointXYZI> *mypoint);
+	void getLikelihood(const pcl::KdTreeFLANN<pcl::PointXYZI> *kdtree,const pcl::PointCloud<pcl::PointXYZI> *pointset,const pcl::PointCloud<pcl::PointXYZI> *mypoint);
 	pcl::PointXYZ getPosition();
 	void printAllParticle();
 	void printThisParticle(int);
-	static bool compareWeight(const particle &a,const particle &b){
-		return a.likelihood >= b.likelihood;
-	}
 	int objectid;
 	double std_x,std_y,std_z;
 	double A0,A1,B;
 	static const int MAX_PARTICLE_NUM = 30;
-	static const int MAX_INTENSITY = 50;
+	static const int MAX_INTENSITY = 300;
 	particle *particles;
 	gsl_rng *rng;
 };
@@ -127,7 +145,6 @@ ParticleFilter::ParticleFilter(){
 
 ParticleFilter::~ParticleFilter()
 {
-	delete []particles;
 	gsl_rng_free(rng);
 }
 
@@ -204,18 +221,21 @@ void ParticleFilter::transition() {
 }
 
 //void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kdtree, const pcl::PointCloud<pcl::PointXYZI> *pointset, const pcl::PointCloud<pcl::PointXYZI> *mypoint) {
-void ParticleFilter::getLikelihood(const pcl::KdTreeFLANN<pcl::PointXYZI> *kdtree, const pcl::PointCloud<pcl::PointXYZI> *pointset, const pcl::PointCloud<pcl::PointXYZI> *mypoint) {
+void ParticleFilter::getLikelihood(const pcl::KdTreeFLANN<pcl::PointXYZI> *kdtree,const pcl::PointCloud<pcl::PointXYZI> *pointset,const pcl::PointCloud<pcl::PointXYZI> *mypoint) {
 	cout << "likelihood function." << endl;
 	for (int i = 0; i < MAX_PARTICLE_NUM; ++i) {
-		int *pf_intensity,*object_intensity;
-		vector<int> pointRadiusSearch;
-		vector<float> pointRadiusSquareDistance;
-		pcl::PointCloud<pcl::PointXYZI> pfpoint; // observed points at the current position
 		cout << endl;
 		cout << "particle: " << i << endl;
+		pcl::PointCloud<pcl::PointXYZI> pfpoint; // observed points at the current position
+		vector<int> pointRadiusSearch;
+		vector<float> pointRadiusSquareDistance;
+		pfpoint.clear();
 		pointRadiusSearch.clear();
 		pointRadiusSquareDistance.clear();
-		pfpoint.clear();
+//		vector<int> (pointRadiusSearch).swap(pointRadiusSearch);
+//		vector<float> (pointRadiusSquareDistance).swap(pointRadiusSquareDistance);
+		cout << "radius capacity:" << pointRadiusSearch.capacity() << endl;
+		cout << "dis capacity:" << pointRadiusSquareDistance.capacity() << endl;
 		pcl::PointXYZI point0;
 		point0.x = particles[i].x;
 		point0.y = particles[i].y;
@@ -230,30 +250,33 @@ void ParticleFilter::getLikelihood(const pcl::KdTreeFLANN<pcl::PointXYZI> *kdtre
 		radius = 0.5 * sqrt(width*width + height*height + longth*longth);
 		cout << "radius: " << radius << endl;
 
-		int result = kdtree->radiusSearch(point,radius,pointRadiusSearch,pointRadiusSquareDistance);
+		int result = kdtree->radiusSearch(point,radius,pointRadiusSearch,pointRadiusSquareDistance,0);
 		cout << result << endl;
 		if(result > 0){
 			cout << "in if section." << endl;
 			cout << "num: " << pointRadiusSearch.size() << endl;
 			for (int j = 0; j < pointRadiusSearch.size(); ++j) {
+				//cout << "kdtree_for:" << j << endl;
 				double dx = abs(pointset->points[pointRadiusSearch[j]].x - point.x);
 				double dy = abs(pointset->points[pointRadiusSearch[j]].y - point.y);
 				double dz = abs(pointset->points[pointRadiusSearch[j]].z - point.z);
-				//cout << dx << " " << dy << " " << dz << endl;
+				//cout <<"("<< dx << "," << dy << "," << dz <<")"<< endl;
 				//cout << "(" << pointset->points[pointRadiusSearch[j]].x << "," << pointset->points[pointRadiusSearch[j]].y <<","<< pointset->points[pointRadiusSearch[j]].z << ")" << endl;
 				if(dx > 0.5*width || dy > 0.5*height || dz > 0.5*longth){
 					continue;
 				}
 				else{
-					pfpoint.push_back(pointset->points[pointRadiusSearch[j]]);
+					cout << "push_back." << endl;
+					pcl::PointXYZI points = pointset->points[pointRadiusSearch[j]];
+					pfpoint.push_back(points);
 				}
 			}
 			if(pfpoint.size() > 0){
 				cout << "!!" << endl;
 				int maxSize = max(mypoint->size(),pfpoint.size());
 				cout << maxSize << " " << mypoint->size() << " " << pfpoint.size() << endl;
-				object_intensity = new int[MAX_INTENSITY];
-				pf_intensity = new int[MAX_INTENSITY];
+				int *object_intensity = new int[MAX_INTENSITY];
+				int *pf_intensity = new int[MAX_INTENSITY];
 				for (int ii = 0; ii < MAX_INTENSITY; ++ii) {
 					object_intensity[ii] = 0;
 					pf_intensity[ii] = 0;
@@ -298,12 +321,20 @@ void ParticleFilter::getLikelihood(const pcl::KdTreeFLANN<pcl::PointXYZI> *kdtre
 
 				particles[i].likelihood = similarity;
 				cout << "likelihood: " << similarity << endl;
+				delete []pf_intensity;
+				delete []object_intensity;
+				delete []fpf_intensity;
+				delete []fobject_intensity;
+				vector<int> ().swap(pointRadiusSearch);
+				vector<float> ().swap(pointRadiusSquareDistance);
+
 			}
 		} else{
 			particles[i].likelihood = 0.0;
 		}
 
 	}
+	cout << "end likelihood." << endl;
 }
 
 void ParticleFilter::printAllParticle() {
@@ -336,32 +367,83 @@ void ParticleFilter::normalizeWeights() {
 	}
 }
 
+struct sortparticle{
+	int particleid;
+	double likelihood;
+	sortparticle(){
+		particleid = 0;
+		likelihood = 0.0;
+	}
+	sortparticle& operator =(const sortparticle &spone){
+		particleid = spone.particleid;
+		likelihood = spone.likelihood;
+	}
+};
+
+bool compareWeight(const sortparticle &a,const sortparticle &b){
+	return a.likelihood >= b.likelihood;
+}
+
 void ParticleFilter::resample() {
 	int number = 0;
 	int count = 0;
-	particle *tmp = new particle[MAX_PARTICLE_NUM];
-	sort(particles,particles+MAX_PARTICLE_NUM,compareWeight);
+	//particle *cparticles = new particle[MAX_PARTICLE_NUM];
+	sortparticle *cparticles = new sortparticle[MAX_PARTICLE_NUM];
+	for (int l = 0; l < MAX_PARTICLE_NUM; ++l) {
+		cparticles[l].particleid = l;
+		cparticles[l].likelihood = particles[l].likelihood;
+		cout << "particle " << l << " likelihood " << cparticles[l].likelihood << endl;
+	}
+	// sort in descending order
+	for (int m = 0; m < MAX_PARTICLE_NUM; ++m) {
+		sortparticle temp = cparticles[m];
+
+		int id = m;
+		bool flag = false;
+		for (int n = m+1; n < MAX_PARTICLE_NUM; ++n) {
+			if(cparticles[n].likelihood > temp.likelihood){
+				id = n;
+				temp = cparticles[n];
+				flag = true;
+			}
+		}
+		if(flag==true){
+			cparticles[id] = cparticles[m];
+			cparticles[m] = temp;
+		}
+	}
+	//particle *tmp = new particle[MAX_PARTICLE_NUM];
+	//sort(cparticles,cparticles+MAX_PARTICLE_NUM*sizeof(sortparticle),compareWeight);
+	for (int k = 0; k < MAX_PARTICLE_NUM; ++k) {
+		cout <<"particle " <<  k << ":" << endl;
+		cout << cparticles[k].particleid << " " << cparticles[k].likelihood << endl;
+		cout << "----------------" << endl;
+	}
+
+	sortparticle *tmp = new sortparticle[MAX_PARTICLE_NUM];
 	for (int i = 0; i < MAX_PARTICLE_NUM; ++i) {
-		number = round(particles[i].likelihood * MAX_PARTICLE_NUM);
+		number = round(cparticles[i].likelihood * MAX_PARTICLE_NUM);
 		for (int j = 0; j < number; ++j) {
-			tmp[count++] = particles[i];
-			if(count == MAX_PARTICLE_NUM)
+			tmp[count++] = cparticles[i];
+			if(count == MAX_PARTICLE_NUM-1)
 				break;
 		}
-		if(count == MAX_PARTICLE_NUM)
+		if(count == MAX_PARTICLE_NUM-1)
 			break;
 	}
 
 	while(count < MAX_PARTICLE_NUM){
-		tmp[count] = particles[0];
+		tmp[count] = cparticles[0];
 		count++;
 	}
 
-	for (int k = 0; k < MAX_PARTICLE_NUM; ++k) {
-		particles[k] = tmp[k];
-	}
+//	for (int k = 0; k < MAX_PARTICLE_NUM; ++k) {
+//		particles[k] = tmp[k];
+//	}
 
-	delete tmp;
+	delete []cparticles;
+	delete []tmp;
+	cout << "end sample." << endl;
 }
 
 pcl::PointXYZ ParticleFilter::getPosition() {
