@@ -320,6 +320,7 @@ void ParticleFilter::getLikelihood(const pcl::KdTreeFLANN<pcl::PointXYZI> *kdtre
 				 */
 
 				particles[i].likelihood = similarity;
+				particles[i].observed_value = pfpoint;
 				cout << "likelihood: " << similarity << endl;
 				delete []pf_intensity;
 				delete []object_intensity;
@@ -443,13 +444,16 @@ void ParticleFilter::resample() {
 		particles[i] = tmpf[tmp[i].particleid];
 	}
 
-	/*
 	for (int j = 0; j < MAX_PARTICLE_NUM; ++j) {
 		cout << "particle " << j << ": " << endl;
 		cout << "(" << particles[j].x << "," << particles[j].y << "," << particles[j].z << ")" << endl;
 		cout << "likelihood :" << particles[j].likelihood << endl;
+		cout << "point size: " << particles[j].observed_value.size() << endl;
+		for (int i = 0; i < particles[j].observed_value.size(); ++i) {
+			cout << "(" << particles[j].observed_value[i].x << "," << particles[j].observed_value[i].y << "," << particles[j].observed_value[i].z << ")" << endl;
+		}
+		cout << "-------------------" << endl;
 	}
-	*/
 	delete []cparticles;
 	delete []tmp;
 	delete []tmpf;
