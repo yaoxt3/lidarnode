@@ -124,7 +124,7 @@ public:
 	int objectid;
 	double std_x,std_y,std_z;
 	double A0,A1,B;
-	static const int MAX_PARTICLE_NUM = 30;
+	static const int MAX_PARTICLE_NUM = 100;
 	static const int MAX_INTENSITY = 300;
 	particle *particles;
 	gsl_rng *rng;
@@ -134,7 +134,7 @@ ParticleFilter::ParticleFilter(){
 	objectid = 0;
 	std_x = 0.55;
 	std_y = 0.45;
-	std_z = 0.3;
+	std_z = 0.35;
 	A0 = 2.0;
 	A1 = -1.0;
 	B = 1.0;
@@ -621,6 +621,7 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
     vector<pcl::PointIndices > cluster_indices;
     pcl::EuclideanClusterExtraction<pcl::PointXYZI > extractor;
     extractor.setClusterTolerance(0.05);
+//	extractor.setClusterTolerance(0.3);
     extractor.setMinClusterSize(5);
     extractor.setMaxClusterSize(5000);
     extractor.setSearchMethod(kdtree);
@@ -657,8 +658,8 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
             point.x = pointer->points[*pit].x;
             point.y = pointer->points[*pit].y;
             point.z = pointer->points[*pit].z;
-            point.intensity = intensity * j;
-           	//point.intensity = pointer->points[*pit].intensity;
+            //point.intensity = intensity * j;
+           	point.intensity = pointer->points[*pit].intensity;
             pinfo.cluster[j-1].points.push_back(point);
             mcluster->points.push_back(point);
 		    cnt ++;

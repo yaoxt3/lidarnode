@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(lidar)
 
+set(CMAKE_BUILD_TYPE Debug CACHE STRING "set build type to debug")
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
