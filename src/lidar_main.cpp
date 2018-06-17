@@ -586,6 +586,74 @@ float Lidar_node::calculate_distance2(pcl::PointXYZ a, pcl::PointXYZ b){
     return dis;
 }
 
+pcl::PointCloud<pcl::PointXYZI> getBox(const pcl::PointCloud<pcl::PointXYZI> *mypoint,pcl::PointXYZ origin, pcl::PointXYZ size)
+{
+	pcl::PointCloud<pcl::PointXYZI> box;
+	box = *mypoint;
+	origin.z += 0.2;
+	size.z += 0.2;
+	cout << "box size: " << box.size() << endl;
+	int x = round(size.y / 0.05);
+	int y = round(size.z / 0.05);
+	// upper boundary
+	for (int i = 0; i < x; ++i) {
+		pcl::PointXYZI tmp;
+		tmp.x = origin.x;
+		tmp.y = origin.y-i*0.05;
+		tmp.z = origin.z;
+		box.push_back(tmp);
+	}
+	// lower boundary
+	for (int i = 0; i < x; ++i) {
+		pcl::PointXYZI tmp;
+		tmp.x = origin.x;
+		tmp.y = origin.y-i*0.05;
+		tmp.z = origin.z-size.z;
+		box.push_back(tmp);
+	}
+	// left boundary
+	for (int j = 0; j < y; ++j) {
+		pcl::PointXYZI tmp;
+		tmp.x = origin.x;
+		tmp.y = origin.y;
+		tmp.z = origin.z-j*0.05;
+		box.push_back(tmp);
+	}
+	// right boundary
+	for (int j = 0; j < y; ++j) {
+		pcl::PointXYZI tmp;
+		tmp.x = origin.x;
+		tmp.y = origin.y-size.y;
+		tmp.z = origin.z-j*0.05;
+		box.push_back(tmp);
+	}
+	return box;
+}
+
+pcl::PointXYZ calculateSize(const pcl::PointCloud<pcl::PointXYZI> *points,pcl::PointXYZ &origin)
+{
+	double maxWidth=-10000.0, minWidth=10000.0;
+	double maxHeight=-10000.0, minHeight=10000.0;
+	double maxLongth=-10000.0, minLongth=10000.0;
+	for (int i = 0; i < points->size(); ++i) {
+		maxWidth = Max(maxWidth,points->points[i].x);
+		maxLongth = Max(maxLongth, points->points[i].y);
+		maxHeight = Max(maxHeight,points->points[i].z);
+		minWidth = Min(minWidth,points->points[i].x);
+		minLongth = Min(minLongth, points->points[i].y);
+		minHeight = Min(minHeight,points->points[i].z);
+	}
+	pcl::PointXYZ size;
+	size.x = maxWidth - minWidth;
+	size.y = maxLongth - minLongth;
+	size.z = maxHeight - minHeight;
+
+	origin.x = minWidth;
+	origin.y = maxLongth;
+	origin.z = maxHeight;
+
+	return size;
+}
 
 // Tracking Model for point cloud
 void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
