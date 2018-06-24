@@ -866,6 +866,7 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 			int cluster_id = 0;
 			pcl::PointXYZ cluster_center_point;
 			for (int k = 0; k < pinfo.point_cluster_num; ++k) {
+				// ignore new object
 				for (int ll = 0; ll < newObjectList.size(); ++ll) {
 					double x0 = newObjectList[ll].x;
 					double y0 = newObjectList[ll].y;
