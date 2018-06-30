@@ -41,10 +41,6 @@ using namespace std;
 using namespace cv;
 
 
-pcl::PointXYZ getCenter(const pcl::PointCloud<pcl::PointXYZI> *points);
-pcl::PointXYZ getOrigin(const pcl::PointXYZ center, const pcl::PointXYZ origin, const pcl::PointXYZ predict);
-pcl::PointXYZ calculateSize(const pcl::PointCloud<pcl::PointXYZI> *points,pcl::PointXYZ &origin);
-pcl::PointCloud<pcl::PointXYZI> getBox(const pcl::PointCloud<pcl::PointXYZI> *mypoint,pcl::PointXYZ origin, pcl::PointXYZ size);
 /*
  * @x,y,z: the current (x,y,z) coordinate
  * @px,py,pz: the previous (x,y,z) coordinate
@@ -98,6 +94,11 @@ struct particle{
 	}
 };
 
+pcl::PointXYZ getCenter(const pcl::PointCloud<pcl::PointXYZI> *points);
+pcl::PointXYZ getOrigin(const pcl::PointXYZ center, const pcl::PointXYZ origin, const pcl::PointXYZ predict);
+pcl::PointXYZ calculateSize(const pcl::PointCloud<pcl::PointXYZI> *points,pcl::PointXYZ &origin);
+pcl::PointCloud<pcl::PointXYZI> getBox(const pcl::PointCloud<pcl::PointXYZI> *mypoint,pcl::PointXYZ origin, pcl::PointXYZ size);
+pcl::PointCloud<pcl::PointXYZI> transformPointCloud(const particle *particles, int len);
 /*
  * @initialParticle: initialize particle's state.
  * @transition: update the current particle's state by previous state.
@@ -130,7 +131,7 @@ public:
 	int objectid;
 	double std_x,std_y,std_z;
 	double A0,A1,B;
-	static const int MAX_PARTICLE_NUM = 25;
+	static const int MAX_PARTICLE_NUM = 30;
 	static const int MAX_INTENSITY = 300;
 	particle *particles;
 	gsl_rng *rng;
@@ -349,14 +350,15 @@ void ParticleFilter::getLikelihood(const pcl::search::KdTree<pcl::PointXYZI> *kd
 }
 
 void ParticleFilter::printAllParticle() {
+	cout << "%%%%%%%%%%%%%%%%%%%%%" << endl;
+	cout << "original position:";
+	cout << "(" << particles[0].x0 << "," << particles[0].y0 << "," << particles[0].z0 << ")" << endl;
 	for (int i = 0; i < MAX_PARTICLE_NUM; ++i) {
-		cout << "particle " << i << ":" << endl;
-		cout << "current position:";
-		cout << "(" << particles[i].x << "," << particles[i].y << "," << particles[i].z << ")" << endl;
+		cout << "particle " << i << ":";
+		cout << "(" << particles[i].x << "," << particles[i].y << "," << particles[i].z << ") ";
 		cout << "likelihood:" << particles[i].likelihood << endl;
-		cout << "original position:";
-		cout << "(" << particles[i].x0 << "," << particles[i].y0 << "," << particles[i].z0 << ")" << endl;
 	}
+	cout << "%%%%%%%%%%%%%%%%%%%%%" << endl;
 }
 
 void ParticleFilter::printThisParticle(int i) {
@@ -369,7 +371,9 @@ void ParticleFilter::printThisParticle(int i) {
 }
 
 void ParticleFilter::updateParticle(const particle *myparticle,const pcl::PointXYZ *center_point,const pcl::PointXYZ size) {
-
+	cout << "^^^^^^^^^^^^^^^^^^" << endl;
+	cout << "In update function." << endl;
+	cout << myparticle->x << " " << myparticle->y << " " << myparticle->z << endl;
 	for (int i = 0; i < MAX_PARTICLE_NUM; ++i) {
 		particles[i].x = center_point->x;
 		particles[i].y = center_point->y;
@@ -587,7 +591,7 @@ Lidar_node::Lidar_node():searchNum(100),frame_num(3){ // error : node_handle_("~
     max_frame = 10;
     frame_points.clear();
     points_node_sub_ = node_handle_.subscribe("velodyne_points", 1028, &Lidar_node::processPointCloud, this);
-    points_node_pub_ = node_handle_.advertise<sensor_msgs::PointCloud2 >("point_cloud",10);
+//    points_node_pub_ = node_handle_.advertise<sensor_msgs::PointCloud2 >("point_cloud",10);
 	test_points_pub_ = node_handle_.advertise<sensor_msgs::PointCloud2 >("test_point",10);
 }
 
@@ -604,9 +608,9 @@ pcl::PointCloud<pcl::PointXYZI> getBox(const pcl::PointCloud<pcl::PointXYZI> *my
 {
 	pcl::PointCloud<pcl::PointXYZI> box;
 	box.clear();
-	//box = *mypoint;
-	origin.z += 0.2;
-	size.z += 0.2;
+	box = *mypoint;
+//	origin.z += 0.2;
+//	size.z += 0.2;
 	int x = round(size.y / 0.05);
 	int y = round(size.z / 0.05);
 	// upper boundary
@@ -668,6 +672,20 @@ pcl::PointXYZ calculateSize(const pcl::PointCloud<pcl::PointXYZI> *points,pcl::P
 	origin.z = maxHeight;
 
 	return size;
+}
+
+pcl::PointCloud<pcl::PointXYZI> transformPointCloud(const particle *particles, int len)
+{
+	pcl::PointCloud<pcl::PointXYZI> points;
+	for (int i = 0; i < len; ++i) {
+		pcl::PointXYZI point;
+		point.x = particles[i].x;
+		point.y = particles[i].y;
+		point.z = particles[i].z;
+		point.intensity = 10;
+		points.push_back(point);
+	}
+	return points;
 }
 
 pcl::PointXYZ getCenter(const pcl::PointCloud<pcl::PointXYZI> *points)
@@ -779,7 +797,7 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
            	point.intensity = pointer->points[*pit].intensity;
             pinfo.cluster[j-1].points.push_back(point);
             mcluster->points.push_back(point);
-            cout << "(" << point.x << "," << point.y << "," << point.z << ")" << endl;
+//            cout << "(" << point.x << "," << point.y << "," << point.z << ")" << endl;
 		    cnt ++;
 		}
 		cout << endl;
@@ -808,7 +826,9 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 	 * 2.observing the likelihood of the object being at the translated position (results in a weight)
 	 * 3.re-sample according to that likelihood (given by the weight)
 	 */
+	pcl::PointCloud<pcl::PointXYZI> particles;
 	pcl::PointCloud<pcl::PointXYZI> box;
+	pcl::PointCloud<pcl::PointXYZI> allParticles;
 	box.clear();
 	if(frame_id == 0){
 		for (int i = 0; i < pinfo.point_cluster_num; ++i) {
@@ -832,10 +852,6 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 			nocluster = false;
 
 		cout << "cluster num: " << frame_points[id].point_cluster_num << endl;
-//		if(id==-1){
-//			frame_id = 0;
-//			return;
-//		}
 		// judges whether this object belongs to the previous frame through its original position (x0,y0,z0)
 		// if not, add it to the newObjectList
 		pcl::PointCloud<pcl::PointXYZ> newObjectList;
@@ -870,13 +886,18 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 			}
 		}
 		cout << "newObjectList size:" << newObjectList.size() << endl;
+		allParticles.clear();
 		for (int i = 0; i < frame_points[id].point_cluster_num; ++i) {
+			pcl::PointCloud<pcl::PointXYZI> iparticles;
 			particle previous_position_particle;
 			bool go_next = false;
 			previous_position_particle = frame_points[id].cluster[i].pf->particles[0];
 
 			frame_points[id].cluster[i].pf->transition();
 //			cout << "transition." << endl;
+
+			iparticles = transformPointCloud(frame_points[id].cluster[i].pf->particles,frame_points[id].cluster[i].pf->MAX_PARTICLE_NUM);
+			frame_points[id].cluster[i].pf->printAllParticle();
 
 			frame_points[id].cluster[i].pf->getLikelihood(&vkdtree,&pinfo.allpoints,&frame_points[id].cluster[i].points);
 //			cout << "likelihood." << endl;
@@ -886,6 +907,9 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 
 			frame_points[id].cluster[i].pf->resample();
 //			cout << "resample." << endl;
+
+			frame_points[id].cluster[i].pf->printAllParticle();
+			allParticles.insert(allParticles.end(),iparticles.begin(),iparticles.end());
 
 			pcl::PointXYZ point;
 			point = frame_points[id].cluster[i].pf->getPosition();
@@ -944,24 +968,27 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 			origin = getOrigin(center,porigin,point);
 			cout <<"size: " <<  size.x << " " << size.y  << " " << size.z << endl;
 			//cout <<"origin: " << origin.x << " " << origin.y << " " << origin.z << endl;
+			cout <<"previous position: (" << previous_position_particle.x << "," << previous_position_particle.y << "," << previous_position_particle.z << ")" << endl;
 			cout <<"original position: (" << previous_position_particle.x0 << "," << previous_position_particle.y0 << "," << previous_position_particle.z0 << ")" << endl;
-			pinfo.cluster[cluster_id].pf->updateParticle(&previous_position_particle,&cluster_center_point,size);
-			pinfo.cluster[cluster_id].pf->printThisParticle(0);
+			pinfo.cluster[cluster_id].pf->updateParticle(&previous_position_particle,&center,size);
+			pinfo.cluster[cluster_id].pf->printAllParticle();
 			box = getBox(&box,origin,size);
 			mcluster->insert(mcluster->end(),box.begin(),box.end());
+			cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" << endl;
 			int next;
-			while(1){
-				cout << "input 1 to continue running the program." << endl;
-				cin >> next;
-				if(next==1)
-					break;
-			}
+//			while(1){
+//				cout << "input 1 to continue running the program." << endl;
+//				cin >> next;
+//				if(next==1)
+//					break;
+//			}
 			cout << "-------------------------------------------" << endl;
 		}
 	}
 
 	mycloud = *mcluster;
 	mycloud.insert(mycloud.end(),box.begin(),box.end());
+	mycloud.insert(mycloud.end(),allParticles.begin(),allParticles.end());
 	cout << "end." << endl;
     sensor_msgs::PointCloud2 pub_msgs;
     pcl::toROSMsg(mycloud,pub_msgs);
@@ -970,14 +997,14 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
     test_points_pub_.publish(pub_msgs);
 	frame_id++;
 	frame_points.push_back(pinfo);
-//    while(1){
-//        int key;
-//        cin >> key;
-//        if(key == 1){
-//            cout << "continue." << endl;
-//            break;
-//        }
-//    }
+    while(1){
+        int key;
+        cin >> key;
+		cout << "input 1 to continue running the program." << endl;
+        if(key == 1){
+            break;
+        }
+    }
 	cout << "##############################" << endl;
 }
 
