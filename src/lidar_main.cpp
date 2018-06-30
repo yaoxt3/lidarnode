@@ -613,6 +613,7 @@ pcl::PointCloud<pcl::PointXYZI> getBox(const pcl::PointCloud<pcl::PointXYZI> *my
 //	size.z += 0.2;
 	int x = round(size.y / 0.05);
 	int y = round(size.z / 0.05);
+	/*** front square ***/
 	// upper boundary
 	for (int i = 0; i < x; ++i) {
 		pcl::PointXYZI tmp;
@@ -643,6 +644,76 @@ pcl::PointCloud<pcl::PointXYZI> getBox(const pcl::PointCloud<pcl::PointXYZI> *my
 		tmp.x = origin.x;
 		tmp.y = origin.y-size.y;
 		tmp.z = origin.z-j*0.05;
+		box.push_back(tmp);
+	}
+
+	/*** back square ***/
+	for (int i = 0; i < x; ++i) {
+		pcl::PointXYZI tmp;
+		tmp.x = origin.x+size.x;
+		tmp.y = origin.y-i*0.05;
+		tmp.z = origin.z;
+		box.push_back(tmp);
+	}
+	// lower boundary
+	for (int i = 0; i < x; ++i) {
+		pcl::PointXYZI tmp;
+		tmp.x = origin.x+size.x;
+		tmp.y = origin.y-i*0.05;
+		tmp.z = origin.z-size.z;
+		box.push_back(tmp);
+	}
+	// left boundary
+	for (int j = 0; j < y; ++j) {
+		pcl::PointXYZI tmp;
+		tmp.x = origin.x+size.x;
+		tmp.y = origin.y;
+		tmp.z = origin.z-j*0.05;
+		box.push_back(tmp);
+	}
+	// right boundary
+	for (int j = 0; j < y; ++j) {
+		pcl::PointXYZI tmp;
+		tmp.x = origin.x+size.x;
+		tmp.y = origin.y-size.y;
+		tmp.z = origin.z-j*0.05;
+		box.push_back(tmp);
+	}
+
+	/*** left square ***/
+	int m = round(size.x/0.05);
+	// upper
+	for (int i = 0; i < m; ++i) {
+		pcl::PointXYZI tmp;
+		tmp.x = origin.x + i*0.05;
+		tmp.y = origin.y;
+		tmp.z = origin.z;
+		box.push_back(tmp);
+	}
+	// lower
+	for (int k = 0; k < m; ++k) {
+		pcl::PointXYZI tmp;
+		tmp.x = origin.x + k*0.05;
+		tmp.y = origin.y;
+		tmp.z = origin.z - size.z;
+		box.push_back(tmp);
+	}
+
+	/*** right square ***/
+	// upper
+	for (int l = 0; l < m; ++l) {
+		pcl::PointXYZI tmp;
+		tmp.x = origin.x + l*0.05;
+		tmp.y = origin.y - size.y;
+		tmp.z = origin.z;
+		box.push_back(tmp);
+	}
+	// lower
+	for (int n = 0; n < m; ++n) {
+		pcl::PointXYZI tmp;
+		tmp.x = origin.x + n*0.05;
+		tmp.y = origin.y - size.y;
+		tmp.z = origin.z - size.z;
 		box.push_back(tmp);
 	}
 	cout << "box size: " << box.size() << endl;
@@ -1004,7 +1075,7 @@ void Lidar_node::TrackingModel(const pcl::PointCloud<pcl::PointXYZI> *pointset)
 	}
 
 	mcluster->insert(mcluster->end(),box.begin(),box.end());
-	mcluster->insert(mcluster->end(),allParticles.begin(),allParticles.end());
+//	mcluster->insert(mcluster->end(),allParticles.begin(),allParticles.end());
 
 	mycloud = *mcluster;
 	cout << "end." << endl;
